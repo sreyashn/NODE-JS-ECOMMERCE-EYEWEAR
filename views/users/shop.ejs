@@ -1,0 +1,174 @@
+
+
+<%-include('../layouts/userHeader.ejs') %>
+
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Shop
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="widget-category mb-30">
+                            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
+                              Category
+                            </h5>
+                
+                            <ul class="categories">
+                              <li><a href="/shop"><option value="">All</option></a></li>
+                              <% categories.forEach(category=> { if (category.is_listed) { %>
+                
+                              <li>
+                                <a href="shopCategoryFilter?id=<%= category._id %>" >
+                                  <option value="<%= category._id %>">
+                                    <%= category.name %>
+                                  </option></a
+                                >
+                              </li>
+                
+                              <% } }); %>
+                            </ul>
+                          </div>
+                        <div class="shop-product-fillter">
+                            <div class="totall-product">
+                               
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row product-grid-3">
+                            <% for (const product of products) { 
+                                const categoryId =product.category; 
+                                categories.forEach(category => { if
+                              (categoryId.toString() === category._id.toString()) { if
+                              (category.is_listed) { %>
+                            <div class="col-lg-3 col-md-4">
+                                <div class="product-cart-wrap mb-30">
+                                    <div class="product-img-action-wrap">
+                                        <div class="product-img product-img-zoom">
+                                            <a href="/singleProduct/<%= product._id%>"> 
+                                                <img class="default-img" src='/admin-assets/imgs/product/<%= product.image[0]%>' alt="<%= product.image[0]%>" />
+                                                <img class="hover-img "src="/admin-assets/imgs/product/<%= product.image[1]%>" alt=""/>
+                                            </a>
+                                        </div>
+                                       
+                                        <!-- <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div> -->
+                                    </div>
+                                    <div class="product-content-wrap">
+                                        <div class="product-category">
+                                            <a><%= category.name %></a>
+                                        </div>
+                                        <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
+                                        <div class="rating-result" title="90%">
+                                            <span>
+                                                <span>90%</span>
+                                            </span>
+                                        </div>
+                                        <div class="product-price">
+                                            <% if (product.discount_price) { %>
+                                            <span>₹<%= product.discount_price %> </span>
+                                            <span class="old-price">- ₹<s><%= product.price %></s></span>
+
+                                            <% } else { %>
+                                                <span class="old-price"> ₹<%= product.price %></span>
+                                                <% } %>
+                                        </div>
+                                        <div class="product-action-1 show">
+                                            <input type="hidden" value="<%= product._id %>" name="productData_id"> 
+                                            <input type="hidden" value="1" name="qty">
+                                            <!-- <button type="button" aria-label="Add To Cart" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } } }); } %>
+                            <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                                <div class="row">
+                                  <div class="col-lg-12 col-mg-6"></div>
+                                  <div class="col-lg-12 col-mg-6"></div>
+                                </div>
+                               
+                                
+                        
+                                </div>
+                            
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      
+                      </main>
+                      <script>
+                        function submitForm() {
+                          var form = document.getElementById("myForm");
+                              form.submit();
+                        }
+                      
+                        
+                        </script>
+
+
+                        <!--pagination-->
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <script src="user-assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="user-assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="user-assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="user-assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="user-assets/js/plugins/slick.js"></script>
+    <script src="user-assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="user-assets/js/plugins/wow.js"></script>
+    <script src="user-assets/js/plugins/jquery-ui.js"></script>
+    <script src="user-assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="user-assets/js/plugins/magnific-popup.js"></script>
+    <script src="user-assets/js/plugins/select2.min.js"></script>
+    <script src="user-assets/js/plugins/waypoints.js"></script>
+    <script src="user-assets/js/plugins/counterup.js"></script>
+    <script src="user-assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="user-assets/js/plugins/images-loaded.js"></script>
+    <script src="user-assets/js/plugins/isotope.js"></script>
+    <script src="user-assets/js/plugins/scrollup.js"></script>
+    <script src="user-assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="user-assets/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="user-assets/js/plugins/jquery.elevatezoom.js"></script>
+    <!-- Template  JS -->
+    <script src="user-assets/js/main.js"></script>
+    <script src="user-assets/js/shop.js"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-fullwidth.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:43 GMT -->
+</html>
+
+<%-include('../layouts/userFooter.ejs') %> 

@@ -1,0 +1,110 @@
+<%-include('../layouts/adminHeader.ejs') %>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Mobile</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% user.forEach(users => { if(users.isAdmin!=1){%>
+                                    <tr>
+                                        <td>
+                                            <div class="ms-2 mt-2 d-flex align-items-center">
+                                                    <%= users.name %>                                            
+                                            </div>     
+                                        </td>
+                                        <td>
+                                            <div class="mt-2">
+                                                <%= users.email %>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex mt-2 justify-content-center">
+                                            <% if( users.is_blocked==0) { %>
+                                                <div class="rounded-3 w-50 text-center bg-success text-white mx-2">Active</div>
+                                            <% } 
+                                            else { %>
+                                                <div class="rounded-3 w-50 text-center bg-danger text-white mx-2">Blocked</div>
+                                            <% } %>
+                                            </div>
+                                        </td>
+                                        
+                                        <td>
+                                            <div class="mt-2">
+                                                <%= users.mobile %>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <% if (user.is_blocked ==1) { %>
+                                                <a  onclick="ProductUnlist('<%= users._id %>'),`<%=  user.is_blocked==0 ? 'unlist' : 'list' %>`" class="btn btn-sm font-sm rounded btn-brand">
+                                                   List
+                                                </a>
+                                              <% } else { %>
+                                                <a  onclick="ProductUnlist('<%= users._id %>',`<%=  user.is_blocked==0 ? 'unlist' : 'list' %>`)" class="btn btn-sm font-sm rounded btn-danger">
+                                                  Block
+                                                </a>
+                                              <% } %>
+                                        </td>
+                                    </tr>
+                                <%} }); %>
+                            </tbody>
+                        </table> <!-- table-responsive.// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+    
+     <script> 
+        
+        
+function ProductUnlist(productId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Please confirm to block this product!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Perform the deletion via AJAX/fetch to the server
+          fetch(`/admin/blockAndunblock/${productId}`, {
+            method: 'GET',
+            // Add other necessary headers or configurations
+          }).then(response => {
+            if (response.ok) {
+              // Product successfully deleted
+              Swal.fire({
+                title: "success",
+                text: "Please confirm to unblock this product!",
+                icon: "success",
+                timer: 2000,
+                timeProgressBar: true,
+                showConfirmButton: false,
+
+
+              })
+                .then(() => {
+                  // Redirect after displaying the success message
+                  window.location.href = '/admin/userManage'; // Redirect to a suitable page
+                });
+            } else {
+              Swal.fire("Error!", "Failed to delete product", "error");
+            }
+          }).catch(error => {
+            Swal.fire("Error!", "Failed to delete product", "error");
+          });
+        }
+      });
+    }
+    </script>
+
+<%-include('../layouts/adminFooter.ejs') %>
