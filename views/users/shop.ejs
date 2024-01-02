@@ -71,7 +71,7 @@
                                         <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
                                         <div class="rating-result" title="90%">
                                             <span>
-                                                <span>90%</span>
+                                                <span><%= product.percentage %></span>
                                             </span>
                                         </div>
                                         <div class="product-price">
@@ -85,7 +85,8 @@
                                         </div>
                                         <div class="product-action-1 show">
                                             <input type="hidden" value="<%= product._id %>" name="productData_id"> 
-                                            <input type="hidden" value="1" name="qty">
+                                            <input type="hidden" value="1" name="qty">   <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/wishlist"><i class="fi-rs-heart"></i></a>
+
                                             <!-- <button type="button" aria-label="Add To Cart" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button> -->
                                         </div>
                                     </div>

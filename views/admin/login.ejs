@@ -84,39 +84,27 @@
     <div class="card mx-auto card-login">
         <div class="card-body">
             <h4 class="card-title mb-4">Sign in</h4>
-            <form action="/admin"  method ="post">
+            <form action="/admin"  method ="post" onsubmit="return validateForm() ">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-<input type="email" class="form-control" 
-class="ms-1 form-control"
-id="email"
-name="email"
-onblur="emailChecking()"
-placeholder="Enter Email"
->
-<div
-id="erroremail"
-class="mt-0 ms-2 position-absolute text-danger"
-></div>
-</div>
-<div class="mb-4">
-<label for="password" class="form-label">Password</label>
-<input type="password" 
-class="form-control" 
-id="password"
-name="password"
-onblur="passwordChecking()"
-placeholder="Enter Password"
->
-<div
-id="errorpassword"
-class="mt-0 ms-2 position-absolute text-danger"
-></div>
-</div>
-                    <div class="mb-4">
-                <button type="submit" class="btn btn-primary w-100"> Login </button>
-            </div> <!-- form-group// -->
-        </form>
+                     <input type="email" class="form-control" class="ms-1 form-control" id="email" name="email" onblur="validateEmail()" placeholder="Enter Email">
+                      <div id="erroremail" class="mt-0 ms-2 position-absolute text-danger"></div>
+                </div>
+                <div class="mb-4">
+                   <label for="password" class="form-label">Password</label>
+                   <input type="password" class="form-control" id="password" name="password" onblur="validatePassword() " placeholder="Enter Password">
+                   <div id="errorpassword" class="mt-0 ms-2 position-absolute text-danger"></div>
+                </div>
+
+                <div class="mb-4">
+                  <button type="submit" class="btn btn-primary w-100"> Login </button>
+             </div> 
+
+               <!-- form-group// -->
+             </form>
+
+            
+
         <p class="text-center small text-muted mb-15">or sign up with</p>
         <div class="d-grid gap-3 mb-4">
             <a href="#" class="btn w-100 btn-light font-sm">
@@ -145,39 +133,83 @@ class="mt-0 ms-2 position-absolute text-danger"
     </div>
   </div>
   <script>
+    
 
-    function emailChecking() {
-      let emailId = document.getElementById("email").value;
-      console.log("emailId" + emailId);
-      if (
-        /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(emailId) == false
-      ) {
-        console.log("emailIddd" + emailId);
-        document.getElementById("erroremail").innerHTML =
-          "Please enter valid email ";
-        return false;
-      } else {
-        document.getElementById("erroremail").innerHTML = "";
-        return true;
-      }
+    // function emailChecking() {
+    //   let emailId = document.getElementById("email").value;
+    //   console.log("emailId" + emailId);
+    //   if (
+    //     /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(emailId) == false
+    //   ) {
+    //     console.log("emailIddd" + emailId);
+    //     document.getElementById("erroremail").innerHTML =
+    //       "Please enter valid email ";
+    //     return false;
+    //   } else {
+    //     document.getElementById("erroremail").innerHTML = "";
+    //     return true;
+    //   }
+    // }
+
+    // let password = document.getElementById("password").value;
+    // function passwordChecking() {
+    //   password = document.getElementById("password").value;
+    //   if (password == "") {
+    //     document.getElementById("errorpassword").innerHTML =
+    //       "please enter your password";
+    //     return false;
+    //   } else if (password.length < 8) {
+    //     document.getElementById("errorpassword").innerHTML =
+    //       "please enter minimum 8 digits";
+    //     return false;
+    //   } else {
+    //     document.getElementById("errorpassword").innerHTML = "";
+    //     return true;
+    //   }
+    // }
+
+    function validateEmail() {
+        let emailId = document.getElementById("email").value;
+        let errorEmail = document.getElementById("erroremail");
+
+        if (!/\S+@\S+\.\S+/.test(emailId)) {
+            errorEmail.innerHTML = "Please enter a valid email address";
+            return false;
+        } else {
+            errorEmail.innerHTML = "";
+            return true;
+        }
     }
 
-    let password = document.getElementById("password").value;
-    function passwordChecking() {
-      password = document.getElementById("password").value;
-      if (password == "") {
-        document.getElementById("errorpassword").innerHTML =
-          "please enter your password";
-        return false;
-      } else if (password.length < 8) {
-        document.getElementById("errorpassword").innerHTML =
-          "please enter minimum 8 digits";
-        return false;
-      } else {
-        document.getElementById("errorpassword").innerHTML = "";
-        return true;
-      }
+    function validatePassword() {
+        let password = document.getElementById("password").value;
+        let errorPassword = document.getElementById("errorpassword");
+
+        if (password.length < 8) {
+            errorPassword.innerHTML = "Password must be at least 8 characters long";
+            return false;
+        } else {
+            errorPassword.innerHTML = "";
+            return true;
+        }
     }
+
+    function validateForm() {
+        // Call your validation functions
+        const isEmailValid = validateEmail();
+        const isPasswordValid = validatePassword();
+
+        // Check if any validation failed
+        if (!isEmailValid || !isPasswordValid) {
+            // Returning false prevents the form from being submitted
+            return false;
+        }
+
+        // If all validations pass, the form will be submitted
+        return true;
+    }
+</script>
+  
     
   </script>
 

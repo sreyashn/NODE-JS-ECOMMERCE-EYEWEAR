@@ -1,8 +1,9 @@
 const express = require("express");
 const admin_route = express();
-const adminController = require("../controllers/adminController");
- const categoryController = require("../controllers/categoryController");
- const productController = require("../controllers/productController");
+const adminController = require("../controllers/admin/adminController");
+const categoryController = require("../controllers/admin/categoryController");
+const productController = require("../controllers/admin/productController");
+const orderController = require("../controllers/admin/orderController");
 const adminAuth = require("../middleware/adminAuth");
 const multer = require("../middleware/multer");
 
@@ -36,6 +37,11 @@ admin_route.post("/addproduct",multer.uploadProduct.array('image'),productContro
 admin_route.get("/editproduct",adminAuth.isLogin, productController.loadEditproduct);
 admin_route.post("/editproduct",multer.uploadProduct.array('image'),productController.editProduct);
 admin_route.get("/deleteproduct/:id",adminAuth.isLogin,productController.deleteProduct);
+
+//orders
+admin_route.get("/alluserorders",adminAuth.isLogin, orderController.listUserOrders);
+admin_route.get("/orderDetails",adminAuth.isLogin,orderController.listOrderDetails);
+admin_route.get("/orderStatusChange",adminAuth.isLogin,orderController.orderStatusChange);
 
 
 

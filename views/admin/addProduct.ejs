@@ -124,53 +124,89 @@
                                                 <!-- Placeholder for default image -->
                                                 <div class="image-container border-1">
                                                     <img style="width: 100px; height: 100px; margin-bottom: 20px;" src="/uploadimage.svg" alt="Default" class="image-preview">
+                                                    <button type="button" class="btn btn-danger btn-sm" onclick="cancelImage(this)">Cancel</button>
                                                 </div>
                                             </div>
                                             <input class="form-control" name="image" id="image" multiple="multiple" type="file" onchange="displayImages(this)">
+
                                             <div class="error-message" style="color: red;" id="image-error"></div>
                                         </div>
                                         
                                         <script>
                                             function displayImages(input) {
                                                 const previewContainer = document.querySelector('.image-preview-container');
-                                                previewContainer.innerHTML = ''; // Clear previous previews
+                                                previewContainer.innerHTML = '';
                                         
                                                 if (input.files && input.files.length > 0) {
                                                     for (let i = 0; i < input.files.length; i++) {
                                                         const reader = new FileReader();
+                                                        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                                        
+                                                        if (!allowedExtensions.exec(input.files[i].name)) {
+                                                            alert('Invalid file type. Please select only images');
+                                                            input.value = ''; // Clear the inputif)
+                                                            return;
+                                                        }
+                                        
                                                         reader.onload = function (e) {
                                                             const imagePreview = document.createElement('div');
-                                                            imagePreview.classList.add('image-container');
+                                                            imagePreview.classList.add('image-container', 'border-1', 'd-flex', 'flex-column', 'align-items-center');
+                                        
                                                             const img = document.createElement('img');
                                                             img.src = e.target.result;
                                                             img.style.width = '100px';
                                                             img.style.height = '100px';
-                                                            img.style.marginBottom = '20px';
-                                                            img.style.marginRight = '5px'; 
-                                                            img.style.marginLeft = '5px'; 
+                                                            img.style.marginBottom = '10px';
+                                                            img.style.marginRight = '5px';
+                                                            img.style.marginLeft = '5px';
                                                             img.classList.add('image-preview');
+                                        
+                                                            const filename = document.createElement('span');
+                                                            filename.innerHTML = input.files[i].name;
+                                                            filename.style.marginBottom = '15px';
+                                        
+                                                            const cancelButton = document.createElement('button');
+                                                            cancelButton.type = 'button';
+                                                            cancelButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                                                            cancelButton.innerHTML = 'Cancel';
+                                                            cancelButton.onclick = function () {
+                                                                cancelImage(this, imagePreview);
+                                                            };
+                                        
                                                             imagePreview.appendChild(img);
+                                                            imagePreview.appendChild(filename);
+                                                            imagePreview.appendChild(cancelButton);
                                                             previewContainer.appendChild(imagePreview);
                                                         };
+                                        
                                                         reader.readAsDataURL(input.files[i]);
                                                     }
                                                 } else {
-                                                    const defaultImagePreview = document.createElement('div');
-                                                    defaultImagePreview.classList.add('image-container');
-                                                    const defaultImg = document.createElement('img');
-                                                    defaultImg.src = '/uploadimage.svg';
-                                                    defaultImg.style.width = '100px';
-                                                    defaultImg.style.height = '100px';
-                                                    defaultImg.style.marginBottom = '20px';
-                                                    defaultImg.style.marginRight = '5px'; 
-                                                    defaultImg.style.marginLeft = '5px'; 
-                                                    defaultImg.classList.add('image-preview');
-                                                    defaultImagePreview.appendChild(defaultImg);
-                                                    previewContainer.appendChild(defaultImagePreview);
+                                                    const noFileChosen = document.createElement('span');
+                                                    noFileChosen.innerHTML = 'No file chosen';
+                                                    noFileChosen.style.marginBottom = '10px';
+                                                    previewContainer.appendChild(noFileChosen);
                                                 }
-                                                
                                             }
+                                        
+                                            function cancelImage(button, imageContainer) {
+                                            imageContainer.remove(); // Remove the image container directly
+
+                                            // Check if all images are canceled to show "No file chosen"
+                                            const previewContainer = document.querySelector('.image-preview-container');
+                                            if (previewContainer.childElementCount === 0) {
+                                            const noFileChosen = document.createElement('span');
+                                            noFileChosen.innerHTML = 'No file chosen';
+                                            noFileChosen.style.marginBottom = '10px';
+                                            previewContainer.appendChild(noFileChosen);
+        }
+    }
                                         </script>
+                                        
+                                        
+                                        
+                                        
+                                        
                                     </div>
                                 </div>
                             </div>

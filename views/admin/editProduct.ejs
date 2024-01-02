@@ -136,6 +136,7 @@
                                                                 <input type="checkbox" id="delete-checkbox<%= i %>" name="deletecheckbox" value="<%= i%>">
                                                                 <label for="delete-checkbox<%= i %>">Delete</label>
                                                                 <img class="image-preview"  src="/admin-assets/imgs/product/<%= product.image[i] %>" alt="Default">
+                                                                <!-- <button type="button" class="btn btn-danger btn-sm" onclick="cancelImageSelection(this,<%= i%>)">Cancel</button> -->
                                                             </div>
                                                         <% } %>
                                                     <% } else{ %>
@@ -184,12 +185,24 @@
                                                 }
                                             }
 
+                                       
+    // function cancelImageSelection(button, imageIndex) {
+    //     const previewContainer = document.querySelector('.image-preview-container');
+    //     const deleteCheckbox = document.getElementById(`delete-checkbox${imageIndex}`);
+    //     previewContainer.removeChild(button.parentElement); // Remove the image container
+    //     deleteCheckbox.checked = false; // Uncheck the corresponding checkbox
+    // }
+
+   
+
+
+
                                            
                                         </script>
                                     </div>
                                 </div>
                             </div> 
-                          >
+                          
                         </div>
 
               

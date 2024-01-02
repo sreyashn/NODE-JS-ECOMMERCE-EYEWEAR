@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../model/userModel");
+const User = require("../../model/userModel");
 
 
 const loadAdminlogin = async (req, res) => {
@@ -65,7 +65,7 @@ const loadUsermanage = async(req,res)=>{
 
 
 
-const blockAndunblockUser = async (req, res) => {
+const  blockAndunblockUser = async (req, res) => {
 
 
   try {
@@ -100,7 +100,9 @@ const blockAndunblockUser = async (req, res) => {
   }
 
 
-}
+};
+
+    
 
 
 

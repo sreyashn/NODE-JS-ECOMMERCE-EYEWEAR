@@ -1,8 +1,8 @@
-const User = require("../model/userModel");
+const User = require("../../model/userModel");
 const bcrypt = require("bcrypt");
-const Category = require("../model/categoryModel")
-const Product = require("../model/productModel")
-const message = require("../config.js/mailer")
+const Category = require("../../model/categoryModel")
+const Product = require("../../model/productModel")
+const message = require("../../config.js/mailer")
 
 let newUser;
 const securePassword = async (password) => {
@@ -57,30 +57,30 @@ const insertUser = async (req,res) => {
 };
 
 
-  // get otp page
-  const loadOtp = async (req,res) => {
-    try {
-      res.render("users/otp");
-    } catch (error) {
-      console.log(error.mesaage);
-    }
+// get otp page
+const loadOtp = async (req, res) => {
+  try {
+    res.render("users/otp");
+  } catch (error) {
+    console.log(error.message);
   }
-// VERIFYOTP      
+};
+
+// VERIFYOTP
 const verifyOtp = async (req, res) => {
   try {
+    const userData = req.session.userData;
+    const fullOTP = req.body.otp;
 
-     const userData = req.session.userData
-     const fullOTP = req.body.otp; 
     if (!req.session.user_id) {
       if (fullOTP == req.session.otp) {
-
         const secure_password = await securePassword(userData.password);
         const user = new User({
           name: userData.name,
           email: userData.email,
           mobile: userData.mobile,
           password: secure_password,
-          image:'',
+          image: "",
           isAdmin: 0,
           is_blocked: 0,
         });
@@ -90,17 +90,16 @@ const verifyOtp = async (req, res) => {
           req.session.user_id = userDataSave._id;
           res.redirect("/login");
         } else {
-          res.render("users/otp", { message: "Registration Failed" });
+          res.render("users/otp", { errorMessage: "Registration Failed" });
         }
       } else {
-        res.render("users/otp", { message: "invalid otp" });
+        res.render("users/otp", { errorMessage: "wrong otp" });
       }
     } else {
       if (fullOTP == req.session.otp) {
-
         res.redirect("/resetPassword");
       } else {
-        res.render("users/otp", { message: "invalid otp" });
+        res.render("users/otp", { errorMessage: "wrong otp" });
       }
     }
   } catch (error) {
@@ -110,12 +109,16 @@ const verifyOtp = async (req, res) => {
 
 // resend otp
 const resendOtp = async (req, res) => {
-  const userData = req.session.userData;
-  const email = userData.email;
-  await message.sendVarifyMail(req,email);
-  res.render("users/otp")
+  try {
+    const userData = req.session.userData;
+    const email = userData.email;
+    await message.sendVarifyMail(req, email);
+    res.render("users/otp");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
-}
 
 
  // login user method
@@ -128,37 +131,43 @@ const resendOtp = async (req, res) => {
   }
  };
 
-const  verifyLogin = async (req,res) => {
+ const verifyLogin = async (req, res) => {
   try {
-    const { email,password } =req.body;
+    const { email, password } = req.body;
 
-    if(!email || !password) {
-      return res.render("users/login",{
-        message:"Please fill all the fields ",
+    if (!email || !password) {
+      return res.render("users/login", {
+        message: "Please fill all the fields ",
       });
     }
 
-    const userData  = await User.findOne({ email: email});
+    const userData = await User.findOne({ email: email });
 
-    if(userData) {
-      const passwordMatch = await bcrypt.compare(password,userData.password);
+    if (userData) {
+      const passwordMatch = await bcrypt.compare(password, userData.password);
 
-      if(passwordMatch && userData.isAdmin === 0 && userData.is_blocked == 0) {
+      if (passwordMatch && userData.isAdmin === 0 && userData.is_blocked == 0) {
         req.session.user_id = userData._id;
         res.redirect("/");
+      } else if (passwordMatch && userData.isAdmin === 0 && userData.is_blocked == 1) {
+        res.render("users/login", {
+          error: "The user is blocked",
+        });
       } else {
-        res.render("users/login",{
-          message:"email and password is incorrect",
+        res.render("users/login", {
+          message: "Email and password are incorrect",
         });
       }
     } else {
-      res.render("users/login",{
-        message:"email and password is incorrect",
-      });    }
+      res.render("users/login", {
+        message: "Email and password are incorrect",
+      });
+    }
   } catch (error) {
     console.log(error.message);
   }
 };
+
 
 // forgot password
 const loadForgotpassword = async (req,res) => {
@@ -232,6 +241,13 @@ const loadHome = async (req,res) =>{
     const userData = await User.findById(userId);
 
     if(userData) {
+      if (userData.isAdmin === 0 && userData.is_blocked === 1) {
+        // User is blocked, redirect to login page with a message
+        return res.render("users/login", {
+          userData: null,
+          error: "Your account has been blocked",
+        });
+      }
       res.render("users/home",{userData});
     } else {
       res.render("users/home",{ userData: null});
@@ -281,6 +297,73 @@ const loadSingleShop = async (req, res) => {
   }
 };
 
+const loadprofile = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+    const userData = await User.findById(userId);
+    if (userData) {
+      res.render("users/userProfile", { userData });
+    } else {
+      res.redirect("/login");
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const userEdit = async (req, res) => {
+  try {
+    let id = req.body.user_id;
+
+    const userData = await User.findById(id);
+
+    const { name, mobile } = req.body;
+
+    if(!req.file){
+      const updateData = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            name,
+            mobile,
+       
+          },
+        }
+      );
+    }
+    else{
+      const updateData = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            name,
+            mobile,
+            image: req.file.filename,
+          },
+        }
+      );
+    }
+
+
+    res.redirect("/userprofile");
+  } catch (error) {
+    console.log(error.message);
+  }
+};    
+
+const loadWishlist =async(req,res) =>{
+  const userId = req.session.user_id;
+  const userData = await User.findById(userId);
+  const products = await Product.find();
+  const categories = await Category.find();
+  try{
+    res.render("users/wishlist",{ userData,products,categories});
+  }catch(error){
+    console.log(error.message);
+  }
+};
+
+
 
 const userLogout = async (req,res) => {
   try {
@@ -306,6 +389,9 @@ module.exports = {
    loadShop,
    loadShopCategory,
    loadSingleShop,
+   loadprofile,
+   userEdit,
+   loadWishlist,
    loadOtp,
    verifyOtp,
    resendOtp,

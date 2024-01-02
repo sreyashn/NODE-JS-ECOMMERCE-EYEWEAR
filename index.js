@@ -24,7 +24,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.setHeader("Cache-Control", "CACHE_CONTROL_HEADER");
   next();
 });
 

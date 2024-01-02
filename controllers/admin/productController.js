@@ -1,8 +1,8 @@
-const Product = require("../model/productModel");
+const Product = require("../../model/productModel");
 const path=require('path')
 const sharp=require('sharp')
-const Category = require("../model/categoryModel");
-const User=require("../model/userModel");
+const Category = require("../../model/categoryModel");
+const User=require("../../model/userModel");
 const { log } = require("console");
 
 const loadProducts = async (req, res) => {
@@ -166,16 +166,17 @@ const editProduct = async (req, res) => {
   }
 };
 
+
 const deleteProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const productData = await Product.findByIdAndDelete(
+    const productData = await Product.findByIdAndUpdate(
       { _id: id },
-      // {
-      //   $set: {
-      //     is_listed: false,
-      //   },
-      // }
+      {
+        $set: {
+          is_listed: false,
+        },
+      }
     );
     res.redirect("/admin/products");
   } catch (error) {
