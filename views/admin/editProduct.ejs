@@ -75,7 +75,7 @@
 
                                     <label class="form-label">Discount Price</label>
 
-                                    <input type="number" name="discoutPrice"  value="<%= product.discount_price %>" placeholder="Type here"
+                                    <input type="number" name="discountPrice"  value="<%= product.discount_price %>" placeholder="Type here"
                                         class="form-control" id="product_discount">
                                     <div class="error-message" style="color: red;" id="product_discount-error"></div>
 
@@ -112,6 +112,12 @@
                                     rows="4"><%= product.description %></textarea>
                                 <div class="error-message" style="color: red;" id="description-error"></div>
 
+                            </div>
+                            <div class="col-md-4">
+                                <label for="inputPrice" class="form-label">Stock</label>
+                                <input type="text" class="form-control"  value="<%= product.stock %>" name="stock" id="inputprice"
+                                    placeholder="enter the stock">
+                                <div class="error-message" style="color: red;" id="product_price-error"></div>
                             </div>
                         </div>
                     </div> 

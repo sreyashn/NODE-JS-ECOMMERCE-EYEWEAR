@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb")
 const mongoose =require("mongoose")
 
 const user= mongoose.Schema({
@@ -30,7 +31,10 @@ const user= mongoose.Schema({
     type:String
    
 },
-
+wishlist:[{
+    type:ObjectId,
+    ref:'Product'
+}],
 
   is_blocked:{
     type:Number,

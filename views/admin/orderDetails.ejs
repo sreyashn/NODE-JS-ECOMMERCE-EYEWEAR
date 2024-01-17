@@ -18,13 +18,13 @@
                 </div>
                 <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                     <li class="dropdown nav-item me-4">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="" id="dropdownAccount" aria-expanded="false">select status </a>
+                        <!-- <a class="dropdown-toggle" data-bs-toggle="dropdown" href="" id="dropdownAccount" aria-expanded="false">select status </a> -->
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                         
-                            <a class="dropdown-item" href="/admin/orderStatusChange?id=<%= order._id%>&status=Confirmed">Confirmed</a>
-                            <a class="dropdown-item" href="/admin/orderStatusChange?id=<%= order._id%>&status=Shipped">Shipped</a>
-                            <a class="dropdown-item" href="/admin/orderStatusChange?id=<%= order._id%>&status=Delivered">Delivered</a>
-                            <a class="dropdown-item"href="/admin/orderStatusChange?id=<%= order._id%>&status=Cancelled">Cancelled</a>
+                            <!-- <a class="dropdown-item" href="/admin/orderStatusChange?id=<%= order._id %>,&status=Confirmed">Confirmed</a>
+                            <a class="dropdown-item" href="/admin/orderStatusChange?id=<%= order._id %>&status=Shipped">Shipped</a>
+                            <a class="dropdown-item" href="/admin/orderStatusChange?id=<%= order._id %>&status=Delivered">Delivered</a> -->
+                            <!-- <a class="dropdown-item"href="/admin/orderStatusChange?id=<%= order._id%>&status=Cancelled">Cancelled</a> -->
                             
                             
                      
@@ -67,9 +67,9 @@
                         <div class="text">
                             <h6 class="mb-1">Order info</h6>
                             <p class="mb-1">
-                                Shipping: Fargo express <br> Pay method: <%=order.paymentMethod %> <br> Status: <%=order.status %>
+                                Shipping: Fargo express <br> Pay method: <%= order.items[0].paymentMethod  %>  <br>   
                             </p>
-                            <a href="#">Download info</a>
+                            <!-- <a href="#">Download info</a> -->
                         </div>
                     </article>
                 </div> 
@@ -97,6 +97,7 @@
                                     <th width="40%">Product</th>
                                     <th width="20%">Unit Price</th>
                                     <th width="20%">Quantity</th>
+                                    <th width="20%">Status</th>
                                     <th width="20%" class="text-end">Total</th>
                                     <th width="20%"></th>
                                 </tr>
@@ -117,17 +118,40 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                ₹<%=item.product.discount_price %>
+                                                ₹<%=item.product.price %>
                                             </td>
                                             <td>
                                                 <%=item.quantity %>
                                             </td>
+                                            <td>
+                                                <%=item.status %>
+                                                
+                                            </td>
                                             <td class="text-end">
                                                 ₹<%= total %>
                                             </td>
-                                        </tr>
-                                        <% 
-                                            }) %>
+                                            <td>
+                                                <%
+                                                if(item.status ) {%>
+                                                    <li class="dropdown nav-item me-4">
+                                                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false">select status </a>
+                                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                                        <button class="dropdown-item" onclick="changeStatus('<%= order._id %>', '<%= item.product._id %>', 'Confirmed')">Confirmed</button>                            
+                                                        <button class="dropdown-item" onclick="changeStatus('<%= order._id %>', '<%= item.product._id %>', 'Shipped')">Shipped</button>
+                                                        <button class="dropdown-item" onclick="changeStatus('<%= order._id %>', '<%= item.product._id %>', 'Delivered')">Delivered</button>
+                                                     
+                                                           
+                                                         
+                                                        </div>
+                                                    </li>
+                                                                                    <% }%>
+                                                                                    
+                                                                            </td>
+                                                                        </tr>
+                                
+                                                                      
+                                                                      
+                                                                        <% }) %>
                                 <tr>
                                     <td colspan="4">
                                         <article class="float-end">
@@ -143,11 +167,11 @@
                                                 <dt>Grand total:</dt>
                                                 <dd> <b class="h5">₹<%= subtotal %></b> </dd>
                                             </dl>
-                                            <dl class="dlist">
+                                            <!-- <dl class="dlist">
                                                 <dt class="text-muted">Status:</dt>
                                                 <dd id="order-status">
                                                     <span class="badge rounded-pill alert-success text-success"> <%=order.status %></span>
-                                                </dd>
+                                                </dd> -->
                                                 
                                         </article>
                                     </td>
@@ -165,27 +189,66 @@
 
 
 <script>
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    
+    // function statusChangeConfirm(id,productId) {
+    //     const status = document.getElementById(`status_${productId}`).value;
+    //     if (!status) {
+    //         alert('Status not recieved');
+    //         return
+    //     }
+    //     Swal.fire({
+    //         title: "Please Confirm!",
+    //         text: "You are changing the status",
+    //         icon: "question",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#3085d6",
+    //         cancelButtonColor: "#d33",
+    //         confirmButtonText: "Yes",
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             // User clicked "Yes," so proceed with removing the item
+    //             changeStatus(id,productId,status);
+    //         }
+    //         else{
+    //             window.location.reload();
+    //         }
+    //     });
+    // }
 
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', async function () {
-            const orderId = '<%= order._id %>';
-            const status = this.textContent.trim();
-
-            try {
-                // Make an AJAX request to update the order status
-                await fetch(`/admin/orderStatusChange?id=${orderId}&status=${status}`);
-
-                // Optionally, you can reload the entire page
-                // window.location.reload();
-
-                console.log('Order status updated successfully:', status);
-            } catch (error) {
-                console.error('Error updating order status:', error);
+    
+    function changeStatus(id, productId,status) {
+                const requestData = {
+    
+                    status,
+                    productId
+                };
+        fetch(`/admin/orderStatusChange?id=${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                  
+                        if (data.message) {
+                            location.reload();
+                            console.log("sucess");
+                        } else {
+                            alert('Error occurred while placing order');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error occurred while placing order');
+                    });    
             }
-        });
-    });
-</script>
+    
+        
+        
+        </script>
+        
 
 
 

@@ -46,7 +46,8 @@
               <th scope="col">Name</th>
               <th scope="col">Category</th>
               <th scope="col">Price</th>
-              <!-- <th scope="col">Quantity</th> -->
+              <th scope="col">Stock</th>
+              <th scope="col">Status</th>
               <th scope="col">Upload Date</th>
               <th scope="col">Action</th>
             </tr>
@@ -86,25 +87,56 @@
                         </span>
                       </div>
                     </td>
-                    <!-- <td>
-                      <% const productStock = product.sizes.map(value => value.stock).reduce((accumulator, currentValue) =>
-                        accumulator + currentValue, 0); %>
-                      <p class="fw-bold mb-1">
-                        <%= productStock %>
+                    <td>
+                      <div class="info align-items-center">
+                
+                        <p class="fw-bold mb-1">
+                          <%= product.stock %>
+                       
                       </p>
-                    </td> -->
+                    </div>
+                    </td>
+                    
+
+                    <td>
+
+                      <% if(product.is_listed)  {%>
+                      <% if(product.stock>20){
+                        %>
+    
+                        <span class="badge rounded-pill alert-success">Published</span>
+                        <% }else if(product.stock==0){ %>
+                          <span class=" badge rounded-pill text-bg-danger">out of stock</span>
+                          <% } else if(product.stock<20){ %>
+    
+                            <span class="badge rounded-pill alert-warning"> low stock</span>
+                            <% }
+                          } else{ %>    
+                            <div class="rounded-3 px-1 text-center bg-danger text-white text-nowrap">Unlisted</div>     
+                        <% }%> 
+    
+                    </td> 
+                          
+    
+                          
+
+
           
                     <td>
                       <%= new Date(product.productAddDate).toLocaleDateString() %>
                     </td>
           
                     <td>
-                      <a onclick="ProductUnlist('<%= product._id %>')" class="btn text-danger font-sm rounded btn-light">
+                      <!-- <a onclick="ProductUnlist('<%= product._id %>')" class="btn text-danger font-sm rounded btn-light">
                         delete
-                      </a>
+                      </a> -->
+
                       <a href="/admin/editProduct/?id=<%= product._id %>" class="btn text-warning font-sm rounded btn-light">
                         <i class="material-icons md-edit"></i> Edit
                       </a>
+                      <a href="#!" onclick="Unlistandlist('<%= product._id %>', `<%= product.is_listed ? 'unlist' : 'list' %>`)" type="button" class="p-2 btn <%= product.is_listed ? 'btn-danger' : 'btn-success' %>">
+                        <span class="d-flex align-items-center material-symbols-outlined"><%= product.is_listed ? 'unlist' : 'publish' %></span>
+                    </a> 
                     </td>
                   </tr>
                 <% }
@@ -148,48 +180,99 @@
       });
     });
 
+    function Unlistandlist(productId, action) {
+                let titleText, confirmText, successText, url;
+                
+                if (action === 'list') {
+                    titleText = "Are you sure?";
+                    confirmText = "Please confirm to list this product!";
+                    successText = "Product has been listed";
+                    buttonText = "Yes list it!"
+                } else if (action === 'unlist') {
+                    titleText = "Are you sure?";
+                    confirmText = "Please confirm to unlist this product!";
+                    successText = "Product has been unlisted";
+                    buttonText = "Yes Unlist it!"
+                }
 
-    function ProductUnlist(productId) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "Please confirm to delete this product!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Perform the deletion via AJAX/fetch to the server
-          fetch(`/admin/deleteproduct/${productId}`, {
-            method: 'GET',
-            // Add other necessary headers or configurations
-          }).then(response => {
-            if (response.ok) {
-              // Product successfully deleted
-              Swal.fire({
-                title: "success",
-                text: "product is deleted!",
-                icon: "success",
-                timer: 2000,
-                timeProgressBar: true,
-                showConfirmButton: false,
-
-
-              })
-                .then(() => {
-                  // Redirect after displaying the success message
-                  window.location.href = '/admin/products'; // Redirect to a suitable page
+                Swal.fire({
+                    title: titleText,
+                    text: confirmText,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: buttonText,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the listing or unlisting via AJAX/fetch to the server
+                        fetch(`/admin/deleteproduct?id=${productId}`, {
+                            method: 'GET',
+                            // Add other necessary headers or configurations
+                        }).then(response => {
+                            if (response.ok) {
+                                // Success message
+                                Swal.fire({
+                                    title: "Success",
+                                    text: successText,
+                                    icon: "success",
+                                    timer: 2000,
+                                    timeProgressBar: true,
+                                    showConfirmButton: false,
+                                }).then(() => {
+                                    // Redirect after displaying the success message
+                                    window.location.href = '/admin/products'; // Redirect to a suitable page
+                                });
+                            } else {
+                                Swal.fire("Error!", "Failed to perform the action", "error");
+                            }
+                        }).catch(error => {
+                            Swal.fire("Error!", "Failed to perform the action", "error");
+                        });
+                    }
                 });
-            } else {
-              Swal.fire("Error!", "Failed to delete product", "error");
             }
-          }).catch(error => {
-            Swal.fire("Error!", "Failed to delete product", "error");
-          });
-        }
-      });
-    }
+    // function ProductUnlist(productId) {
+    //   Swal.fire({
+    //     title: "Are you sure?",
+    //     text: "Please confirm to delete this product!",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#d33",
+    //     confirmButtonText: "Yes, delete it!",
+    //   }).then((result) => {
+    //     if (result.isConfirmed) {
+    //       // Perform the deletion via AJAX/fetch to the server
+    //       fetch(`/admin/deleteproduct/${productId}`, {
+    //         method: 'GET',
+    //         // Add other necessary headers or configurations
+    //       }).then(response => {
+    //         if (response.ok) {
+    //           // Product successfully deleted
+    //           Swal.fire({
+    //             title: "success",
+    //             text: "product is deleted!",
+    //             icon: "success",
+    //             timer: 2000,
+    //             timeProgressBar: true,
+    //             showConfirmButton: false,
+
+
+    //           })
+    //             .then(() => {
+    //               // Redirect after displaying the success message
+    //               window.location.href = '/admin/products'; // Redirect to a suitable page
+    //             });
+    //         } else {
+    //           Swal.fire("Error!", "Failed to delete product", "error");
+    //         }
+    //       }).catch(error => {
+    //         Swal.fire("Error!", "Failed to delete product", "error");
+    //       });
+    //     }
+    //   });
+    // }
 
   </script> <!-- content-main end// -->
 

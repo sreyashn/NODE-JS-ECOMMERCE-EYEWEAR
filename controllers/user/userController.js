@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const Category = require("../../model/categoryModel")
 const Product = require("../../model/productModel")
 const message = require("../../config.js/mailer")
+const Wallet=require("../../model/walletModel")
 
 let newUser;
 const securePassword = async (password) => {
@@ -234,6 +235,42 @@ const loadResetPassword = async (req,res) => {
    }
  };
 
+
+ 
+const loadWallets = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+    const userData = await User.findById(userId);
+
+    if (!userData) {
+      return res.render("users/login", { userData: null });
+    }
+    const page = parseInt(req.query.page) || 1;
+ 
+    const limit = 6;
+    const totalCount = await Product.countDocuments();
+    
+    const totalPages = Math.ceil(totalCount / limit);
+
+    const walletData = await Wallet.findOne({ user: userId }).sort({ date: -1 })
+      .populate({
+        path: 'transaction',
+      }).skip((page - 1) * limit)
+      .limit(limit);;
+
+    if (!walletData) {
+      return res.render("users/wallet", { userData, wallet: null,currentPage: 0 ,totalPages:0 });
+    }
+
+    res.render("users/wallet", { userData, wallet: walletData, totalPages ,
+      currentPage: page, });
+
+  } catch (err) {
+    console.error("Error in loadWallets route:", err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 const loadHome = async (req,res) =>{
   try {
     const userId = req.session.user_id;
@@ -287,9 +324,24 @@ const loadSingleShop = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const userData = await User.findById(userId);
+
+    if (!userData) {
+      return res.status(404).send("User not found");
+    }
+
     const productId = req.params.id;
     const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
+
     const categories = await Category.find();
+
+    if (!categories || categories.length === 0) {
+      return res.status(404).send("Categories not found");
+    }
+
 
     res.render("users/singleProduct", { userData, product, categories });
   } catch (error) {
@@ -364,6 +416,87 @@ const loadWishlist =async(req,res) =>{
 };
 
 
+// const wishlist =async(req,res) =>{
+
+// const userId = req.session.user_id;
+// const productId = req.params.productId;
+
+// try {
+//   const user = await User.findOne({ _id: userId }).populate('wishlist');
+//     if (!user) {
+//         return res.status(404).json({ success: false, message: 'User not found' });
+//     }
+
+//     // Check if the product is not already in the wishlist
+//     if (!user.wishlist.includes(productId)) {
+//         user.wishlist.push(productId);
+//         await user.save();
+//     }
+
+//     res.status(200).json({ success: true, message: 'Product added to wishlist' });
+// } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ success: false, message: 'Internal Server Error' });
+// }
+// };
+
+
+
+
+const removeFromWishlist = async (req, res) => {
+
+  const userId = req.session.user_id;
+  const productId = req.params.productId;
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Remove the product from the wishlist
+    user.wishlist.pull(productId);
+    await user.save();
+
+    
+    console.log(`Product ${productId} removed from wishlist for user ${userId}`);
+
+    res.status(200).json({ success: true, message: 'Product removed from wishlist' });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
+const updateUserProfilepic = async (req, res) => {
+  try {
+    const userData = await User.findById(req.session.user_id);
+
+    if (!req.file) {
+      // Handle error if no file is received
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
+    const croppedImage = req.file.filename;
+
+    await User.findByIdAndUpdate(userData._id, {
+      $set: {
+        image: croppedImage,
+      },
+    });
+
+    res.status(200).json({ success: true, message: 'Profile Picture changed' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+
+
 
 const userLogout = async (req,res) => {
   try {
@@ -382,6 +515,7 @@ module.exports = {
    verifyLogin,
    loadForgotpassword,
    forgotPasswordotp,
+   loadWallets,
    loadHome,
    userLogout,
    loadResetPassword,
@@ -392,8 +526,11 @@ module.exports = {
    loadprofile,
    userEdit,
    loadWishlist,
+  //  wishlist,
+   removeFromWishlist,
    loadOtp,
    verifyOtp,
    resendOtp,
+   updateUserProfilepic
 };
 

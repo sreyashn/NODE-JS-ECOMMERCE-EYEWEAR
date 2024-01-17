@@ -37,20 +37,14 @@
                               <% } }); %>
                             </ul>
                           </div>
-                        <div class="shop-product-fillter">
-                            <div class="totall-product">
-                               
-                            </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row product-grid-3">
+                      
+                        <div class="row product-grid-3" id="productGrid">
                             <% for (const product of products) { 
                                 const categoryId =product.category; 
                                 categories.forEach(category => { if
                               (categoryId.toString() === category._id.toString()) { if
                               (category.is_listed) { %>
-                            <div class="col-lg-3 col-md-4">
+                            <div class="col-lg-4 col-md-4">
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
@@ -75,13 +69,12 @@
                                             </span>
                                         </div>
                                         <div class="product-price">
-                                            <% if (product.discount_price) { %>
-                                            <span>₹<%= product.discount_price %> </span>
-                                            <span class="old-price">- ₹<s><%= product.price %></s></span>
-
+                                            <!-- <% if (product.price) { %> -->
+                                                <span>₹<%= product.price %> </span>
+                                                <!-- <span class="old-price">- ₹<s><%= product.price %></s></span>
                                             <% } else { %>
-                                                <span class="old-price"> ₹<%= product.price %></span>
-                                                <% } %>
+                                                <span class="product-price"> ₹<%= product.price %></span>
+                                                <% } %> -->
                                         </div>
                                         <div class="product-action-1 show">
                                             <input type="hidden" value="<%= product._id %>" name="productData_id"> 
@@ -115,6 +108,27 @@
                               form.submit();
                         }
                       
+
+                        
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const productGrid = document.getElementById("productGrid");
+    const products = productGrid.getElementsByClassName("col-lg-4"); // Assuming each card is within a div with class "col-lg-4"
+
+    searchInput.addEventListener("input", function () {
+        const searchText = searchInput.value.toLowerCase();
+
+        for (let i = 0; i < products.length; i++) {
+            const productName = products[i].querySelector("h2 a").textContent.toLowerCase();
+
+            if (!searchText || productName.includes(searchText)) {
+                products[i].style.display = "";
+            } else {
+                products[i].style.display = "none";
+            }
+        }
+    });
+})
                         
                         </script>
 

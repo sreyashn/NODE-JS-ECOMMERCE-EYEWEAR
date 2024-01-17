@@ -5,6 +5,7 @@ const userController = require("../controllers/user/userController");
 const cartController = require("../controllers/user/cartController");
 const orderController = require("../controllers/user/orderController");
 const addressController=require("../controllers/user/addressController");
+const couponController=require('../controllers/admin/couponController')
 const multer = require("../middleware/multer");
 
 
@@ -15,6 +16,8 @@ user_route.post("/register", userController.insertUser);
  user_route.get("/otp", userController.loadOtp);
  user_route.post("/otp", userController.verifyOtp);
  user_route.get("/resendotp", userController.resendOtp);
+ user_route.get("/logout",userController.userLogout);
+ user_route.get('/Wallets',userController.loadWallets);
 
  
  //user login
@@ -28,16 +31,18 @@ user_route.post("/register", userController.insertUser);
  //home
 
  user_route.get("/", userController.loadHome);
- user_route.get("/shop", userController.loadShop);
+ user_route.get("/shop",userController.loadShop);
  user_route.get("/shopCategoryFilter",userController.loadShopCategory);
  user_route.get("/singleProduct/:id",userController.loadSingleShop);
- user_route.get("/wishlist", userController.loadWishlist);
+ user_route.get("/wishlist",userController.loadWishlist);
+//  user_route.post("/wishlist",userController.wishlist);
+ user_route.delete("/removeWishlist/:productId",userController.removeFromWishlist);
 
  //cart
  user_route.get("/cart",cartController.loadCartPage);
  user_route.post("/cart",cartController.addTocart );
  user_route.put("/updateCart", cartController.updateCartCount);
- user_route.delete("/removeCartitem", cartController.removeFromCart);
+ user_route.delete("/removeCartitem",cartController.removeFromCart);
 
  //user
  user_route.get("/userprofile",userController.loadprofile );
@@ -53,12 +58,17 @@ user_route.post("/register", userController.insertUser);
  //order
  user_route.get("/checkout",orderController.loadCheckout );
  user_route.post("/checkout",orderController.checkOutpost );
+ user_route.post('/razorpayOrder',orderController.razorpayOrder );
  user_route.get("/orderSuccess",orderController.loadOrderDetails);
  user_route.get("/orderDetails/:id",orderController.loadOrderHistory);
- user_route.get("/orderCancel",orderController.orderCancel);
+//  user_route.get("/orderCancel",orderController.orderCancel);
+ user_route.post("/orderCancel",orderController.orderCancel);
+ user_route.post('/return',orderController.returnData );
 
 
-user_route.get("/logout",userController.userLogout);
+ //coupon
+user_route.get('/coupons',couponController.userCouponList)
+user_route.post('/applyCoupon',orderController.applyCoupon)
 
 
 module.exports = user_route;

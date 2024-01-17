@@ -33,7 +33,14 @@
                                   <li class="nav-item">
                                       <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
                                   </li>
-                             
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="/Wallets"><i class="fi-rs-shopping-bag mr-10"></i>Wallets</a>
+                                  </li>
+              
+                                  <li class="nav-item">
+                                    <a class="nav-link"  href="/coupons" ><i class="fi-rs-shopping-bag mr-10"></i>coupon</a>
+                                  </li>
+              
                               
                                   <li class="nav-item">
                                       <a class="nav-link" href="/logout"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
@@ -87,7 +94,7 @@
                                                           if (userData.image) {
                                                               %><img class="img-lg mb-3 img-avatar" id="previewImage" src="/user-assets/imgs/user/<%=userData.image %>" alt="User Photo"><%
                                                           }else{
-                                                              %><img class="img-lg mb-3 img-avatar" id="previewImage" src="user-assets/imgs/people/avatar1.jpg" alt="User Photo"><%
+                                                              %><img class="img-lg mb-3 img-avatar" id="previewImage" src="user-assets/imgs/user/avatar1.jpg" alt="User Photo"><%
        
                                                           }
                                                           %>
@@ -274,12 +281,7 @@ function redirectToResetPassword() {
     }
   
   
-  
-  
-  
-  
-  
-          </script>
+ </script>
           <%- include('../Layouts/UserFooter.ejs') %>
 
 

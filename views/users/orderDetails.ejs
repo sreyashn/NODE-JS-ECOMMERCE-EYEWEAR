@@ -6,171 +6,7 @@
 
 <body>
   
-    <!-- <header class="header-area header-style-1 header-height-2">
-        
-      
-        <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
-            <div class="container">
-                <div class="header-wrap">
-                   
-                    <div class="header-right">
-                        <div class="search-style-2">
-                       
-                        </div>
-                        <div class="header-action-right">
-                        
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="header-bottom header-bottom-bg-color sticky-bar">
-            <div class="container">
-                <div class="header-wrap header-space-between position-relative">
-                    <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="index.html"><img src="/userassets/imgs/theme/logo.svg" alt="logo"></a>
-                    </div>
-                    <div class="header-nav d-none d-lg-flex">
-                        <div class="main-categori-wrap d-none d-lg-block">
-                            <div class="logo logo-width-1">
-                                <a href="index.html"><img src="/userassets/imgs/theme/logo.svg" alt="logo"></a>
-                            </div>
-                        </div>
-                        <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
-                            <nav>
-                                <ul>
-                                    <li><a class="active" href="/">Home </a>
-                                    </li>
-                                    <li>
-                                        <a href="page-about.html">About</a>
-                                    </li>
-                                    <li><a href="/shop">Shop </a>
-                                    </li>
-                                     
-                                    </li>
-                                    <li>
-                                        <a href="page-contact.html">Contact</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                    <div class="hotline d-none d-lg-block">
-                        <div class="header-action-2">
-                            
-                            <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
-                                    <img class="svgInject" alt="Evara" src="/userassets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">4</span>
-                                </a>
-                            </div>
-                            <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="/cart">
-                                    <img alt="Evara" src="/userassets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue">2</span>
-                                </a>
-                                
-                            </div>
-                            <div class="header-action-icon-2">
-                         
-                                <% if (userData) {
-                                 
-                                    %>
-                                  
-                              <ul class=" navbar-nav ms-auto me-3 me-lg-4">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                      <img class="svgInject" alt="Evara" src="/userassets/imgs/theme/icons/icon-user.svg">
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="/userprofile">Settings</a></li>
-                                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                                        <li><hr class="dropdown-divider" /></li>
-                                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                                    </ul>
-                                </li>
-                            </ul> 
-                               <% } else {%>    
-                            
-                                <a class="" href="/login">
-                                    <img alt="Evara" class="w-50" src="/userassets/imgs/theme/icons/icon-user.svg">
-                                  
-                                </a>
-                                
-                           
-                              <%
-                                    
-                                } %>
-                          </div>
-                        </div>
-                    </div>
-               
-                    <div class="header-action-right d-block d-lg-none">
-                        <div class="header-action-2">
-                            <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
-                                    <img alt="Evara" src="/userassets/imgs/theme/icons/icon-heart.svg">
-                                
-                                    <span class="pro-count white">4</span>
-                                </a>
-                            </div>
-                            <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="shop-cart.html">
-                                    <img alt="Evara" src="/userassets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count white">2</span>
-                                </a>
-                                <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                    <ul>
-                                        <li>
-                                            <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Evara" src="/userassets/imgs/shop/thumbnail-3.jpg"></a>
-                                            </div>
-                                            <div class="shopping-cart-title">
-                                                <h4><a href="shop-product-right.html">Plain Striola Shirts</a></h4>
-                                                <h3><span>1 × </span>$800.00</h3>
-                                            </div>
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Evara" src="/userassets/imgs/shop/thumbnail-4.jpg"></a>
-                                            </div>
-                                            <div class="shopping-cart-title">
-                                                <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
-                                                <h3><span>1 × </span>$3500.00</h3>
-                                            </div>
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="shopping-cart-footer">
-                                        <div class="shopping-cart-total">
-                                            <h4>Total <span>$383.00</span></h4>
-                                        </div>
-                                        <div class="shopping-cart-button">
-                                            <a href="shop-cart.html">View cart</a>
-                                            <a href="shop-checkout.html">Checkout</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="header-action-icon-2 d-block d-lg-none">
-                                <div class="burger-icon burger-icon-white">
-                                    <span class="burger-icon-top"></span>
-                                    <span class="burger-icon-mid"></span>
-                                    <span class="burger-icon-bottom"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header> -->
+   
     <div class="mobile-header-active mobile-header-wrapper-style">
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
@@ -221,6 +57,7 @@
                             <!-- <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a> -->
                         </div>
                     </div>
+              
                 </header>
                 <div class="card-body">
                     <div class="row mb-50 mt-20 order-info-wrap">
@@ -237,8 +74,11 @@
                                     <br>
                                     <a href="/userProfile">View profile</a>
                                 </div>
+                              
                             </article>
+                         
                         </div> 
+                        
                         <div class="col-md-4">
                             <article class="icontext align-items-start">
                                 <span class="icon icon-sm rounded-circle bg-primary-light">
@@ -247,7 +87,8 @@
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p class="mb-1">
-                                        Shipping: Fargo express <br> Pay method: <%=order.paymentMethod %> <br> 
+                                        Shipping: Fargo express <br> 
+                                        <!-- Pay method: <%=order.paymentMethod %> <br>  -->
                                         <!-- Status: <%= order.status %> -->
                                     </p>
                                     <a href="#">Download info</a>
@@ -266,11 +107,17 @@
                                     </p>
                                     <a href="/userAddress">View profile</a>
                                 </div>
+                             
                             </article>
+                       
                         </div> 
+                        
                     </div> 
                     <div class="row">
+                        
+                 
                         <div class="col-lg-11">
+                         
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -279,11 +126,14 @@
                                             <th width="20%">Unit Price</th>
                                             <th width="20%">Quantity</th>
                                             <th width="20%" class="text-end">Total</th>
+                                            <th width="20%">Payment method</th>
+                                            <th width="20%">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% let subtotal=0; order.items.forEach(function(item) { 
-                                           let total=item.product.discount_price * item.quantity; subtotal +=total; %>
+                                        <% let subtotal=0;
+                                         order.items.forEach(function(item) { 
+                                           let total=item.price * item.quantity; subtotal =order.totalAmount; %>
                                                 <tr>
                                                     <td>
                                                         <a class="itemside" href="#">
@@ -297,7 +147,7 @@
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        ₹<%=item.product.discount_price %>
+                                                        ₹<%=item.price %>
                                                     </td>
                                                     <td>
                                                         <%=item.quantity %>
@@ -305,12 +155,43 @@
                                                     <td class="text-end">
                                                         ₹<%= total %>
                                                     </td>
-                                                    <td>
-                            <a  class="btn bg-danger" onclick="cancelOrder('<%= order._id %>')">cancel</a>
-                        </td>
+                                                    <td class="text-end">
+                                                        <%= item.paymentMethod %>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <%= item.status %>
+                                                    </td>
+                                                    <td class="text-end">
+
+
+                                                         <% if (item.status=="Confirmed" ) { %> <button
+                                                            class="btn bg-danger btn-sm"  data-bs-target="<%=item.product._id %>" onclick="cancelProduct('<%= order._id %>','<%=item.product._id %>','<%= item.status %>')">cancel</button>
+                                                        <% }else if (item.status=="Cancelled" ) {
+                                                            %> <button
+                                                            class="btn bg-danger btn-sm" 
+                                                            data-bs-target="<%=item.product._id %>" disabled>cancel</button>
+                                                        <%
+                                                        }
+                                                        else if (item.status=="Delivered" ) {
+                                                            %> <button
+                                                            class="btn bg-success btn-sm" 
+                                                            data-bs-target="<%=item.product._id %>" >Return</button>
+                                                        <%
+                                                        }
+                                                        else if (item.status=="Returned" ) {
+                                                            %> <button
+                                                            class="btn bg-success btn-sm" 
+                                                            data-bs-target="<%=item.product._id %>" disabled>Return</button>
+                                                        <%
+                                                        } %>
+                                                    </td>
+                                         
+
                                                 </tr>
-                                                <% 
-                                                    }) %>
+                                                <% }) %>
+                                                
+
+                                   
                                         <tr>
                                             <td colspan="4">
                                                 <article class="float-end">
@@ -326,17 +207,20 @@
                                                         <dt>Grand total:</dt>
                                                         <dd> <b class="h5">₹<%= subtotal %></b> </dd>
                                                     </dl>
-                                                    <dl class="dlist">
+                                                    <!-- <dl class="dlist">
                                                         <dt class="text-muted">Status:</dt>
                                                         <dd  id="order-status">
                                                             <span class="badge rounded-pill alert-success text-success text-danger"><%= order.status %></span>
                                                         </dd>
                                                     </dl>
+                                                    -->
                                                 </article>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                             
+                                <!-- <a  class="btn bg-danger" onclick="cancelOrder('<%= order._id %>')">cancel</a> -->
                             </div> <!-- table-responsive// -->
                         </div> 
                        
@@ -345,66 +229,98 @@
                 </div>
             </div> 
         </section> 
-
         <script>
-      
-        async function cancelOrder(orderId) {
-            const orderStatusElement = document.getElementById('order-status');
+           
+           function cancelProduct(orderId, productId, status) {
+            console.log(orderId, productId, status);
+
             
-            // Show SweetAlert confirmation dialog
-            const isConfirmed = await Swal.fire({
-                title: 'Are you sure?',
-                text: 'Do you really want to cancel this order?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, cancel it!'
-            });
-        
-            if (isConfirmed.isConfirmed) {
-                console.log('User confirmed cancellation. Proceeding with orderId:', orderId);
-        
-                try {
-                    // Loop through each product in the order and send a cancellation request
-                    for (const item of order.items) {
-                        const productId = item.product._id;
-                        const response = await fetch(`/cancelProduct?orderId=${orderId}&productId=${productId}`);
-                        const data = await response.text();
-        
-                        // Check if the response contains an error message
-                        if (data.includes('Error')) {
-                            console.error('Failed to cancel product:', data);
-                            // Show an alert for testing
-                            alert('Failed to cancel product. Please try again.');
-                        }
-                    }
-        
-                    localStorage.setItem('orderCancelled', 'true');
-                    
-                    // Update the status on the page
-                    // if (orderStatusElement) {
-                    //     orderStatusElement.innerHTML = '<span class="badge rounded-pill alert-danger text-danger">Cancelled</span>';
-                    // }
-        
-                    // Show SweetAlert using Swal.fire directly
-                    Swal.fire({
-                        title: 'Order Cancelled',
-                        text: 'Your order has been successfully cancelled.',
-                        icon: 'success',
-                    });
-                } catch (error) {
-                    console.error('Error cancelling order:', error);
-                    // Show an alert for testing
-                    alert('Error cancelling order. Please try again.');
+            const requestData = {
+                productId,
+                orderId,
+                status
+            };
+if (status==="Confirmed") {
+
+    Swal.fire({
+        title: 'Confirm Deletion',
+        text: 'Are you sure you want to cancel the product?',   
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes,ok',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            fetch(`/orderCancel?id=${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                if (data.success) {
+                    location.reload();
+                    console.log("success");
+                } else {
+                    console.log(data.message || 'Error occurred while placing order');
                 }
-            } else {
-                // User clicked cancel, do nothing or provide feedback
-                console.log('User canceled the cancellation.');
-            }
+            })
+
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('2 Error occurred while placing order');
+                });
         }
-        
-    </script> 
+    });
+
+
+
+   
+
+}else if (status==="Delivered") {
+
+
+    Swal.fire({
+        title: 'Confirm Return',
+        text: 'Are you sure you want to return the product?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes,ok',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            fetch(`/return?id=${productId}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+  })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              location.reload();
+              console.log("sucess");
+          } else {
+              alert('Error occurred while placing order');
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Error occurred while placing order');
+      });
+        }
+    });
+}
+ 
+           }
+
+        </script>
+         
         
         
  

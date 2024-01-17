@@ -51,20 +51,20 @@ const addProduct = async (req, res) => {
       }
     }
 
-    const { name, category, price,discount_price, productColor, description } = req.body;
+    const { name, category, price,discount_price, stock, description } = req.body;
     const sizedata = req.body.sizes;
     
     const addProducts = new Product({
       name,
       category,
       price,
-      productColor,
+      stock,
       discount_price,
       description,
       sizes: sizedata,
       image: imageData,
     });
-
+console.log("Product:",addProducts);
     await addProducts.save();
     res.redirect("/admin/products");
   } catch (error) {
@@ -98,8 +98,6 @@ const editProduct = async (req, res) => {
       name,
       category,
       price,
-      discoutPrice,
-      productColor,
       description,
     } = req.body;
 
@@ -169,7 +167,7 @@ const editProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.query.id;
     const productData = await Product.findByIdAndUpdate(
       { _id: id },
       {

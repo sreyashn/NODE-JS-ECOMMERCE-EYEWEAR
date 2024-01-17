@@ -26,15 +26,14 @@ const Product = new mongoose.Schema({
     type:Number, 
     required:true
   },
-  sizes: [
-    {
-      size: String,
-      stock: Number,
+  sizes:[{
    
-      
-    },
-  ],
 
+  }],
+  stock:{
+    type:Number,
+    required: true
+    },
   productAddDate: {
     type: Date,
     default: Date.now, // Store the current date and time when the user is created
@@ -42,7 +41,14 @@ const Product = new mongoose.Schema({
   is_listed:{
     type:Boolean,
     default:true
-}
+},
+discountStatus:{
+  type:Boolean,
+  default:false
+},
+discount:Number,
+discountStart:Date,
+discountEnd:Date,
  
 
   

@@ -3,7 +3,7 @@ const Order = require("../../model/orderModel");
 const Address = require("../../model/addressModel");
 const User = require("../../model/userModel");
 const Cart = require("../../model/cartModel");
-
+const dateFun=require("../../config.js/dateData")
 const Product = require("../../model/productModel");
 
 
@@ -56,10 +56,14 @@ const listUserOrders = async (req, res) => {
 }
 
 const orderStatusChange = async (req, res) => {
-    try {
+   
+  console.log('entered status');
+  try {
     
       const orderId = req.query.id;
-      const status = req.query.status;
+      const {status,productId} = req.body;
+
+      console.log('inside change');
  
       const order = await Order.findOne({ _id: orderId })
         .populate("user")
@@ -72,24 +76,34 @@ const orderStatusChange = async (req, res) => {
           model: "Product",
         });
  
+         
+  console.log(order,"orderorder");
+
+        const product = order.items.find(
+          (item) => item.product._id.toString() === productId
+        );
+      
+        if (product) product.status = status;
+        if (product.status=='Delivered') product.paymentStatus = 'success';
   
       const updateData = await Order.findByIdAndUpdate(
         { _id: orderId },
         {
           $set: {
-            status:status
+            items: order.items,
        
           },
-        }
+        },
+        { new: true }
       );
     
-  
-
-      res.render("admin/orderDetails", { order });
-   
+      
+      return res.status(200).json({ success:true,message: "Order status change successfully" });
   
     } catch (error) {
-      console.log(error.message);
+      return res
+      .status(500)
+      .json({ error: "An error occurred while change status the order" });
     }
   }; 
 

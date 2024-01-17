@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const User = require("../../model/userModel");
-
+const Order = require("../../model/orderModel");
+const Product = require("../../model/productModel");
+const Category = require("../../model/categoryModel");
 
 const loadAdminlogin = async (req, res) => {
   try {
