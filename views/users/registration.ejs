@@ -140,7 +140,7 @@
                           <input
                             type="password"
                             id="cpassword"
-                           
+                            onkeyup="password2Checking()"
                             placeholder="Confirm Password"
                           />
                           <div
@@ -148,6 +148,26 @@
                             class="mt-0 ms-2 text-danger"
                           ></div>
                         </div>
+                        <div class="">
+                          <div class="toggle_info">
+                            <span>
+                              <i class="fi-rs-label mr-10"></i>
+                              <span class="text-secondary">Have a referral code?</span>
+                              <a href="#referral" data-bs-toggle="collapse" class="collapsed font-weight-bold ms-2"
+                                style="text-decoration: none;" aria-expanded="false">Click here</a>
+                            </span>
+                          </div>
+                          <div class="panel-collapse collapse coupon_form" id="referral">
+                      
+                                <div class="form-group mt-1" id="referral-code-group">
+                                  <label for="referralCode" class="mt-1">Enter the referral code</label>
+                                  <input type="text" class="form-control" name="referralCode" id="referralCode"
+                                    value="<%= referral %>" <%=referral ? 'readonly' : '' %>>
+                            
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="form-group text-center">
                           <button
                             type="submit"
@@ -286,5 +306,27 @@ passwordChecking();
         }
       }
     </script>
+
+
+        
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const referralToggle = document.getElementById('referral-toggle');
+    const referralCodeGroup = document.getElementById('referral-code-group');
+
+    // Check if referral code is not null, then display the referral code group
+    if ("<%= referral %>" !== "") {
+      referralCodeGroup.style.display = 'block';
+    }
+
+    referralToggle.addEventListener('click', function () {
+      if (referralCodeGroup.style.display === 'none') {
+        referralCodeGroup.style.display = 'block';
+      } else {
+        referralCodeGroup.style.display = 'none';
+      }
+    });
+  });
+</script>
   </body>
 </html>

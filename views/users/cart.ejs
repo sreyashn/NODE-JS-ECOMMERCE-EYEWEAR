@@ -30,6 +30,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
+                    <% if (outOfStockError) { %>
+                        <div class="alert alert-danger" role="alert">
+                            product in the cart exceed the available stock.
+                        </div>
+                    <% } %>
+                    
                     <div class="table-responsive">
                         <table class="table shopping-summery text-center clean">
                             <thead>
@@ -59,6 +65,7 @@
                                         
                                                 <input type="number" class="form-control" name="qty" value="<%= cartData.quantity %>" min="1" max="10" step="1" data-decimals="0" required onchange="updateCart('<%= cartData.product._id %>', this.value)">
                                            </div>
+                                         
                                         </td>
                                         <td class="text-right" data-title="Cart">
                                            <span><%=productTotal[index] %></span>
@@ -85,12 +92,12 @@
                     </div>
                     <div class="cart-action text-end">
                 
-                        <a href="/shop" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                     </div>
-                    <div class="divider center_icon mt-50 mb-50">
+              
                     <div class="row mb-50">
                         <div class="col-lg-6 col-md-12">
                        
+                            <a href="/shop" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="border p-md-4 p-30 border-radius cart-totals">
@@ -102,7 +109,7 @@
                                         <tbody>
                                             <tr>
                                                 <td class="cart_total_label">Cart Subtotal</td>
-                                                <td class="cart_total_amount">$<%=subtotalWithShipping %><span class="font-lg fw-900 text-brand"></span></td>
+                                                <td class="cart_total_amount">₹<%=subtotalWithShipping %><span class="font-lg fw-900 text-brand"></span></td>
                                             </tr>
                                             <tr>
                                                 <td class="cart_total_label">Shipping</td>
@@ -110,12 +117,17 @@
                                             </tr>
                                             <tr>
                                                 <td class="cart_total_label">Total</td>
-                                                <td class="cart_total_amount">$<%=subtotalWithShipping %><strong><span class="font-xl fw-900 text-brand"></span></strong></td>
+                                                <td class="cart_total_amount">₹<%=subtotalWithShipping %><strong><span class="font-xl fw-900 text-brand"></span></strong></td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
+                                <%if (subtotalWithShipping !=0) {%>
                                 <a href="/checkout" class="btn ">  Proceed To CheckOut</a>
+
+                                <%
+                                
+                            } %>
                             </div>
                         </div>
                     </div>
@@ -163,6 +175,9 @@
 }
 
     function updateCart(productId, newQuantity) {
+
+        
+
         fetch(`/updateCart?productId=${productId}&quantity=${newQuantity}`, {
             method: 'PUT',
         })
@@ -178,6 +193,9 @@
         .catch(error => {
             console.error('Error updating cart:', error);
         });
+    }
+
+    function getProductStock(productId) {
     }
 
     

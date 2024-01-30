@@ -41,9 +41,6 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: 'Confirmed',
       },
-      reason:{
-        type:String
-      },
       paymentMethod: {
         type:String,
         require:true,

@@ -4,6 +4,7 @@ const Category = require("../../model/categoryModel")
 const Product = require("../../model/productModel")
 const message = require("../../config.js/mailer")
 const Wallet=require("../../model/walletModel")
+const Banner=require("../../model/bannerModel")
 
 let newUser;
 const securePassword = async (password) => {
@@ -17,7 +18,9 @@ const securePassword = async (password) => {
 
 const loadRegister =async(req,res) =>{
   try{
-    res.render("users/registration");
+    referral = req.query.referralCode;
+    console.log(referral,"referral");
+    res.render("users/registration",referral);
   }catch(error){
     console.log(error.message);
   }
@@ -31,19 +34,62 @@ const insertUser = async (req,res) => {
     const mobile = req.body.mobile;
     const name = req.body.name;
     const password = req.body.password;
-   
+    
     if(!email||!mobile||!name || !password) {
       return res.render("users/registration",{
         message:"Please fill all the fields",
       });
     }
 
+    req.session.referralCode = req.body.referralCode || null;
+    const referralCode = req.session.referralCode;
+    console.log(referralCode,"referralCode");
     const existMail = await User.findOne({email:email});
+
+    if (referralCode) {
+      referrer = await User.findOne({ referralCode:referralCode });
+      console.log(referrer,"referrer");
+
+      if (!referrer) {
+        res.render("users/registration", { message: "Invalid referral code." });
+      }
+
+      if (referrer.userReferred.includes(req.body.email)) {
+        res.render("users/registration", {
+          message: "Referral code has already been used by this email.",
+        });
+      }else{
+        referrer = await User.findOne({ referralCode:referralCode });
+        console.log("............",referrer);
+        referrerId = referrer._id
+
+        referrerWallet = await Wallet.findOne({user:referrerId})
+        console.log("////////////",referrerWallet);
+        if (!referrerWallet) {
+          // If wallet doesn't exist, create a new one
+          referrerWallet = new Wallet({
+            user: referrer._id,
+            transaction: [{ type: "credit", amount: 50 }],
+            walletBalance: 50, // Initial balance of 50 rupees
+          });
+        } else {
+          // If wallet exists, update the balance
+          referrerWallet.walletBalance += 50; // Add 50 rupees
+          referrerWallet.transaction.push({
+            type: "credit",
+            amount: 50,
+          });
+        }
+        
+        await referrerWallet.save();
+      }
+    }
 
     if(existMail){
       res.render("users/registration",{ message : "this user already exists"});
     } else {
       req.session.userData = req.body;
+      console.log("////....",req.session.userData);
       req.session.register = 1;
       req.session.email = email;
       if(req.session.email) {
@@ -89,6 +135,19 @@ const verifyOtp = async (req, res) => {
         const userDataSave = await user.save();
         if (userDataSave && userDataSave.isAdmin === 0) {
           req.session.user_id = userDataSave._id;
+          if(userData.referralCode){
+            referrer = await User.findOne({ referralCode:userData.referralCode });
+            referrer.userReferred = req.session.user_id
+            await referrer.save()
+
+            referrerWallet = new Wallet({
+              user: req.session.user_id,
+              transaction: [{ type: "credit", amount: 50 }],
+              walletBalance: 50, // Initial balance of 50 rupees
+            });
+
+            await referrerWallet.save()
+        }
           res.redirect("/login");
         } else {
           res.render("users/otp", { errorMessage: "Registration Failed" });
@@ -276,18 +335,48 @@ const loadHome = async (req,res) =>{
     const userId = req.session.user_id;
 
     const userData = await User.findById(userId);
+    const productData = await Product.find();
+    const categories = await Category.find();
+    const banner = await Banner.find();
+    console.log(banner);
 
     if(userData) {
-      if (userData.isAdmin === 0 && userData.is_blocked === 1) {
-        // User is blocked, redirect to login page with a message
-        return res.render("users/login", {
-          userData: null,
-          error: "Your account has been blocked",
-        });
-      }
-      res.render("users/home",{userData});
+     
+      res.render("users/home",{userData, products: productData, categories,banner: banner || [],});
     } else {
-      res.render("users/home",{ userData: null});
+      res.render("users/home",{ userData: null,products: productData, categories,banner: [],});
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadAbout = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+
+    const userData = await User.findById(userId);
+  
+    if (userData) {
+      res.render("users/about", {  userData,  });
+    } else {
+      res.render("users/about", { userData: null,  });
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadContact = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+
+    const userData = await User.findById(userId);
+  
+    if (userData) {
+      res.render("users/contact", {  userData,  });
+    } else {
+      res.render("users/contact", { userData: null,  });
     }
   } catch (error) {
     console.log(error.message);
@@ -298,9 +387,18 @@ const loadShop = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const userData = await User.findById(userId);
-    const productData = await Product.find();
+
     const categories = await Category.find();
-    res.render("users/shop", { products: productData, userData, categories});
+    const page = parseInt(req.query.page) || 1;
+
+    
+    const limit = 6;
+    const totalCount = await Product.countDocuments();
+
+    const totalPages = Math.ceil(totalCount / limit);
+    const productData = await Product.find().skip((page - 1) * limit).limit(limit);
+
+    res.render("users/shop", { products: productData, userData, categories,totalPages, currentPage: page,});
   } catch (error) {
     console.log(error.message);
   }
@@ -311,9 +409,16 @@ const loadShopCategory = async (req, res) => {
     const userId = req.session.user_id;
     const userData = await User.findById(userId);
     const categoryId = req.query.id;
-    const productData = await Product.find({category:categoryId});
+    const page = parseInt(req.query.page) || 1;
+ 
+    const limit = 6;
+    const totalCount = await Product.countDocuments({category:categoryId});
+    
+    const totalPages = Math.ceil(totalCount / limit);
+    const productData = await Product.find({category:categoryId}).skip((page - 1) * limit)
+    .limit(limit);
     const categories = await Category.find();
-    res.render("users/shop", { products: productData, userData, categories });
+    res.render("users/shop", { products: productData, userData, categories,totalPages,currentPage: page,  });
 
   } catch (error) {
     console.log(error.message);
@@ -403,72 +508,11 @@ const userEdit = async (req, res) => {
   }
 };    
 
-const loadWishlist =async(req,res) =>{
-  const userId = req.session.user_id;
-  const userData = await User.findById(userId);
-  const products = await Product.find();
-  const categories = await Category.find();
-  try{
-    res.render("users/wishlist",{ userData,products,categories});
-  }catch(error){
-    console.log(error.message);
-  }
-};
-
-
-// const wishlist =async(req,res) =>{
-
-// const userId = req.session.user_id;
-// const productId = req.params.productId;
-
-// try {
-//   const user = await User.findOne({ _id: userId }).populate('wishlist');
-//     if (!user) {
-//         return res.status(404).json({ success: false, message: 'User not found' });
-//     }
-
-//     // Check if the product is not already in the wishlist
-//     if (!user.wishlist.includes(productId)) {
-//         user.wishlist.push(productId);
-//         await user.save();
-//     }
-
-//     res.status(200).json({ success: true, message: 'Product added to wishlist' });
-// } catch (error) {
-//     console.error(error.message);
-//     res.status(500).json({ success: false, message: 'Internal Server Error' });
-// }
-// };
 
 
 
 
-const removeFromWishlist = async (req, res) => {
 
-  const userId = req.session.user_id;
-  const productId = req.params.productId;
-
-  try {
-    // Find the user by ID
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    // Remove the product from the wishlist
-    user.wishlist.pull(productId);
-    await user.save();
-
-    
-    console.log(`Product ${productId} removed from wishlist for user ${userId}`);
-
-    res.status(200).json({ success: true, message: 'Product removed from wishlist' });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
-  }
-};
 
 
 const updateUserProfilepic = async (req, res) => {
@@ -520,14 +564,13 @@ module.exports = {
    userLogout,
    loadResetPassword,
    resetPassword,
+   loadAbout,
+   loadContact,
    loadShop,
    loadShopCategory,
    loadSingleShop,
    loadprofile,
    userEdit,
-   loadWishlist,
-  //  wishlist,
-   removeFromWishlist,
    loadOtp,
    verifyOtp,
    resendOtp,

@@ -51,7 +51,7 @@ const addProduct = async (req, res) => {
       }
     }
 
-    const { name, category, price,discount_price, stock, description } = req.body;
+    const { name, category, price, stock, description } = req.body;
     const sizedata = req.body.sizes;
     
     const addProducts = new Product({
@@ -59,7 +59,6 @@ const addProduct = async (req, res) => {
       category,
       price,
       stock,
-      discount_price,
       description,
       sizes: sizedata,
       image: imageData,
@@ -99,6 +98,7 @@ const editProduct = async (req, res) => {
       category,
       price,
       description,
+      stock
     } = req.body;
 
     const sizedata = req.body.sizes;
@@ -150,10 +150,8 @@ const editProduct = async (req, res) => {
           name,
           category,
           price,
-          discount_price: discoutPrice,
-          productColor,
           description,
-          sizes: sizedata,
+          stock,
           image:images,
         },
       }

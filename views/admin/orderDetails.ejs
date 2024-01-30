@@ -37,8 +37,8 @@
                         </div>
                     </li>
                     
-               
-                    <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+<!--                
+                    <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a> -->
                 </div>
             </div>
         </header>
@@ -103,13 +103,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% let subtotal=0; order.items.forEach(function(item) { 
-                                   let total=item.product.discount_price * item.quantity; subtotal +=total; %>
+                                <% let subtotal=0;
+                                            order.items.forEach(function(item) { 
+                                            let total=item.price * item.quantity; subtotal = order.totalAmount; %>
                                         <tr>
                                             <td>
                                                 <a class="itemside" href="#">
                                                     <div class="left">
-                                                        <img src="/admin-assets/imgs/product/<%=item.product.image[0]%>"
+                                                        <img src="/assets/imgs/product/<%=item.product.image[0]%>"
                                                             width="40" height="40" class="img-xs" alt="Item">
                                                     </div>
                                                     <div class="info">
@@ -132,14 +133,16 @@
                                             </td>
                                             <td>
                                                 <%
-                                                if(item.status ) {%>
+                                                if(item.status != 'Delivered'&& item.status != 'Returned' && item.status != 'Cancelled') {%>
                                                     <li class="dropdown nav-item me-4">
                                                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false">select status </a>
                                                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                                                         <button class="dropdown-item" onclick="changeStatus('<%= order._id %>', '<%= item.product._id %>', 'Confirmed')">Confirmed</button>                            
                                                         <button class="dropdown-item" onclick="changeStatus('<%= order._id %>', '<%= item.product._id %>', 'Shipped')">Shipped</button>
                                                         <button class="dropdown-item" onclick="changeStatus('<%= order._id %>', '<%= item.product._id %>', 'Delivered')">Delivered</button>
-                                                     
+                                                        <% }else{ %>
+                                                            ....
+                                                    
                                                            
                                                          
                                                         </div>

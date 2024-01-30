@@ -5,7 +5,7 @@ const path = require('path');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       
-      cb(null, 'public/admin-assets/imgs/category');
+      cb(null, 'public/assets/imgs/category');
     },
     filename: function (req, file, cb) {
       const fileName = Date.now() + path.extname(file.originalname);
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
   const storeproductIMG = multer.diskStorage({
     destination: function (req, file, cb) {
       
-      cb(null, 'public/admin-assets/imgs/product');
+      cb(null, 'public/assets/imgs/product');
     },
     filename: function (req, file, cb) {
       const fileName = Date.now() + path.extname(file.originalname);

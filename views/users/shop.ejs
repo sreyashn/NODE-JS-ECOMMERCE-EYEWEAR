@@ -8,7 +8,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow">Home</a>
+                    <a href="/" rel="nofollow">Home</a>
                     <span></span> Shop
                 </div>
             </div>
@@ -63,25 +63,34 @@
                                             <a><%= category.name %></a>
                                         </div>
                                         <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
-                                        <div class="rating-result" title="90%">
+                                        <div class="rating-result" >
                                             <span>
                                                 <span><%= product.percentage %></span>
                                             </span>
                                         </div>
-                                        <div class="product-price">
+                                        <!-- <div class="product-price"> -->
                                             <!-- <% if (product.price) { %> -->
-                                                <span>₹<%= product.price %> </span>
+                                                <!-- <span>₹<%= product.price %> </span> -->
                                                 <!-- <span class="old-price">- ₹<s><%= product.price %></s></span>
                                             <% } else { %>
                                                 <span class="product-price"> ₹<%= product.price %></span>
                                                 <% } %> -->
+                                        <!-- </div> -->
+                                        <div class="product-price">
+                                            <% if (product.discount && product.discount < product.price) { %>
+                                                <span class="discounted-price">₹<%= product.discount %></span>
+                                                <span class="old-price">₹<%= product.price %></span>
+                                            <% } else { %>
+                                                <span>₹<%= product.price %></span>
+                                            <% } %>
                                         </div>
                                         <div class="product-action-1 show">
-                                            <input type="hidden" value="<%= product._id %>" name="productData_id"> 
-                                            <input type="hidden" value="1" name="qty">   <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/wishlist"><i class="fi-rs-heart"></i></a>
-
-                                            <!-- <button type="button" aria-label="Add To Cart" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button> -->
+                                            <button aria-label="Add To Wishlist" class="action-btn hover-up" onclick="addToWishlist('<%= product._id %>')">
+                                                <i class="fi-rs-heart"></i>
+                                            </button>
                                         </div>
+                                        
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -97,6 +106,32 @@
                                 </div>
                             
                               </div>
+                              <div class="pagination-area mt-30 mb-50" style="display: flex; justify-content: center;">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-start">
+                                      <% if (currentPage > 1) { %>
+                                        <li class="page-item">
+                                          <a class="page-link" href="?page=<%= currentPage - 1 %>"><</a>
+                                        </li>
+                                      <% } %>
+                                  
+                                      <% for (let i = 1; i <= totalPages; i++) { %>
+                                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                          <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                                        </li>
+                                      <% } %>
+                                  
+                                      <% if (currentPage < totalPages) { %>
+                                        <li class="page-item">
+                                          <a class="page-link" href="?page=<%= currentPage + 1 %>">></a>
+                                        </li>
+                                      <% } %>
+                                 
+                                        
+                                    </ul>
+                                </nav>
+                            </div>
+                    </div>
                             </div>
                           </div>
                         </section>
@@ -109,27 +144,51 @@
                         }
                       
 
-                        
-  document.addEventListener("DOMContentLoaded", function () {
+
+
+document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("searchInput");
     const productGrid = document.getElementById("productGrid");
     const products = productGrid.getElementsByClassName("col-lg-4"); // Assuming each card is within a div with class "col-lg-4"
 
     searchInput.addEventListener("input", function () {
-        const searchText = searchInput.value.toLowerCase();
+        const searchText = searchInput.value.toLowerCase().trim();
 
         for (let i = 0; i < products.length; i++) {
-            const productName = products[i].querySelector("h2 a").textContent.toLowerCase();
+            const productContent = products[i].textContent.toLowerCase();
 
-            if (!searchText || productName.includes(searchText)) {
+            if (!searchText || productContent.includes(searchText)) {
                 products[i].style.display = "";
             } else {
                 products[i].style.display = "none";
             }
         }
     });
-})
+});
+
                         
+function addToWishlist(product_Id) {
+    fetch('/addtowishlist', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ productData_id: product_Id })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Product added to wishlist successfully:', data.message);
+            // Optionally, you can perform some action after successfully adding the product to the wishlist
+        } else {
+            console.error('Failed to add product to wishlist:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error adding product to wishlist:', error);
+    });
+}
+
                         </script>
 
 

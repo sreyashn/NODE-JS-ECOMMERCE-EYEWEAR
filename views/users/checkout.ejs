@@ -25,14 +25,6 @@
                         <div class="panel-collapse collapse coupon_form " id="coupon">
                             <div class="panel-body">
                                 <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
-                                <form method="post">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Enter Coupon Code...">
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn  btn-md" name="login">Apply Coupon</button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     </div>
@@ -40,19 +32,20 @@
                 <form>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-7"> <input type="text" id="couponCodeInput"
-                                    placeholder="Enter Coupon Code..."></div>
+                            <div class="col-7">
+                                <div class="input-group">
+                                    <input type="text" id="couponCodeInput" class="form-control" placeholder="Enter Coupon Code...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-close" style="margin-left: 10px;" type="button" onclick="removeCoupon()"></button>
+                                    </span>
+                                </div>
+                            </div>
+                            
                             <div class="col-5"> <button class="btn  btn-md" name="login"
                                     id="applyCouponButton" data-bs-dismiss="modal">Apply
                                     Coupon</button></div>
                         </div>
-
-
-
                     </div>
-
-
-
                     <div id="couponSuccessMessage" class="text-success">
                         <!-- <input type="text" id="totalAfterCoupon"> -->
                         <small id="couponSuccessMessage"></small>
@@ -232,7 +225,7 @@
                                                         </a></h5>
                                                     <span class="product-qty">x <%= cartData.quantity %></span>
                                                 </td>
-                                                <td>$<%=productTotal[index] %>
+                                                <td>₹<%=productTotal[index] %>
                                                 </td>
                                             </tr>
 
@@ -241,7 +234,7 @@
                                                     <th>SubTotal</th>
 
 
-                                                    <td class="product-subtotal" colspan="2">$<%=subtotalWithShipping %>
+                                                    <td class="product-subtotal" colspan="2">₹<%=subtotalWithShipping %>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -251,7 +244,7 @@
                                                 <tr>
                                                     <th>Total</th>
                                                     <td colspan="2" class="product-subtotal" id="totalAmount"><span
-                                                            class="font-xl text-brand fw-900" id="totalAfterCoupon">$<%=subtotalWithShipping
+                                                            class="font-xl text-brand fw-900" id="totalAfterCoupon">₹<%=subtotalWithShipping
                                                                 %></span></td>
                                                 </tr>
 
@@ -315,6 +308,13 @@
     </main>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        function removeCoupon() {
+            location.reload()
+        }
+    </script>
+    
     <script>
 
 const couponRadios = document.querySelectorAll('input[name="checkcoupen"]');

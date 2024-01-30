@@ -8,7 +8,7 @@ const userData = await User.findOne({ _id: req.session.user_id });
 
     try {
     
-       if (req.session.user_id && userData.isAdmin==0 && userData.is_blocked===1 ) {
+       if (req.session.user_id && userData.isAdmin==0 && userData.is_blocked===0 ) {
 
     next();
   }else{

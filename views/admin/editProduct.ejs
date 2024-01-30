@@ -12,7 +12,14 @@
                                     class="btn btn-light rounded font-sm mr-5 text-body hover-up">cancel</button></a>
                             <input type="submit" class="btn btn-md rounded font-sm hover-up" value="Upload"
                               >
-
+                              <div id="invalid">
+                                <% if (typeof error !=='undefined' && error) { %>
+                                    <p class="text-danger" id="message">
+                                        <%= error %>
+                                    </p>
+                                    <% } %>
+                                    
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -28,7 +35,7 @@
 
                             </div>
                             <div class="row gx-3">
-                                <div class="col-md-6  mb-3">
+                        
 
                                    
                                 
@@ -71,17 +78,6 @@
 
 
 
-                                <div class="col-md-4  mb-3">
-
-                                    <label class="form-label">Discount Price</label>
-
-                                    <input type="number" name="discountPrice"  value="<%= product.discount_price %>" placeholder="Type here"
-                                        class="form-control" id="product_discount">
-                                    <div class="error-message" style="color: red;" id="product_discount-error"></div>
-
-
-
-                                </div>
 
                           
 
@@ -90,13 +86,12 @@
                                 <div class="col-md-12 card mb-4">
                                     <div class="card-body">
 
-                    
-
 
                                             
                                             <!-- Add Product Images Here -->
                                         </div>
                                         
+
 
 
                                     </div>
@@ -124,61 +119,94 @@
 
                 </div>
 
-
-                <div class="col-lg-4">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <h4>Picture</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class=" row d-flex justify-content-around flex-row">
-                                        <div class="card col-lg-8 p-2">
-                                            <div class="images-container">
-                                                <div class="image-preview-container d-flex flex-wrap justify-content-around">
-
-                                                    <% if (product.image && product.image.length > 0) { %>
-                                                        <% for (let i = 0; i < product.image.length; i++) { %>
-                                                            <div class="image-container border-1 mb-4">
-                                                                <input type="checkbox" id="delete-checkbox<%= i %>" name="deletecheckbox" value="<%= i%>">
-                                                                <label for="delete-checkbox<%= i %>">Delete</label>
-                                                                <img class="image-preview"  src="/admin-assets/imgs/product/<%= product.image[i] %>" alt="Default">
-                                                                <!-- <button type="button" class="btn btn-danger btn-sm" onclick="cancelImageSelection(this,<%= i%>)">Cancel</button> -->
-                                                            </div>
-                                                        <% } %>
-                                                    <% } else{ %>
-                                                        <div class="image-container border-1 mb-4">
-                                                            <img class="image-preview" style="width: 100px; height: 100px; margin-bottom: 20px;" src="/uploadimage.svg" alt="Default">
-                                                        </div>
-                                                    <% } %>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Picture</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-around flex-row">
+                            <div class="card col-lg-8 p-2">
+                                <div class="images-container">
+                                    <div class="image-preview-container d-flex flex-wrap justify-content-around">
+                
+                                        <% if (product.image && product.image.length > 0) { %>
+                                            <% for (let i = 0; i < product.image.length; i++) { %>
+                                                <div class="image-container border-1 mb-4">
+                                                    <input type="checkbox" id="delete-checkbox<%= i %>" name="deletecheckbox" value="<%= i%>">
+                                                    <label for="delete-checkbox<%= i %>">Delete</label>
+                                                    <img class="image-preview"  src="/assets/imgs/product/<%= product.image[i] %>" alt="Default">
                                                 </div>
-                                                <input class="form-control" name="image"  multiple="multiple" type="file" onchange="displayImages(this)">
-                                                <div class="error-message" style="color: red;" id="product_image-error"></div>
-                                            </div>                                
-                                        </div>
-                                        <script>
-                                            function displayImages(input) {
-                                                const previewContainer = document.querySelector('.image-preview-container');
-                                                previewContainer.innerHTML = ''; // Clear previous previews
-                                        
-                                                if (input.files && input.files.length > 0) {
-                                                    for (let i = 0; i < input.files.length; i++) {
-                                                        const reader = new FileReader();
-                                                        reader.onload = function (e) {
-                                                            const imagePreview = document.createElement('div');
-                                                            imagePreview.classList.add('image-container');
-                                                            const img = document.createElement('img');
-                                                            img.src = e.target.result;
-                                                            img.style.width = '100px';
-                                                            img.style.height = '100px';
-                                                         
-                                                            img.classList.add('image-preview');
-                                                            imagePreview.appendChild(img);
-                                                            previewContainer.appendChild(imagePreview);
-                                                        };
-                                                        reader.readAsDataURL(input.files[i]);
-                                                    }
-                                                } else {
-                                                    const defaultImagePreview = document.createElement('div');
+                                            <% } %>
+                                        <% } else{ %>
+                                            <div class="image-container border-1 mb-4">
+                                                <img class="image-preview" style="width: 100px; height: 100px; margin-bottom: 20px;" src="/uploadimage.svg" alt="Default">
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    <input class="form-control" name="image" multiple="multiple" type="file" onchange="displayImages(this)">
+                                
+                                <div class="error-message" style="color: red;" id="product_image-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function displayImages(input) {
+                        const previewContainer = document.querySelector('.image-preview-container');
+                        previewContainer.innerHTML = '';
+                
+                        if (input.files && input.files.length > 0) {
+                            for (let i = 0; i < input.files.length; i++) {
+                                const reader = new FileReader();
+                                const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                
+                                if (!allowedExtensions.exec(input.files[i].name)) {
+                                    alert('Invalid file type. Please select only images');
+                                    input.value = ''; // Clear the inputif)
+                                    return;
+                                }
+                
+                                reader.onload = function (e) {
+                                    const imagePreview = document.createElement('div');
+                                    imagePreview.classList.add('image-container');
+                
+                                    const img = document.createElement('img');
+                                    img.src = e.target.result;
+                                    img.style.width = '100px';
+                                    img.style.height = '100px';
+                                    img.style.marginBottom = '10px';
+                                    img.style.marginRight = '5px';
+                                    img.style.marginLeft = '5px';
+                                    img.classList.add('image-preview');
+                
+                                    const filename = document.createElement('span');
+                                    filename.innerHTML = input.files[i].name;
+                                    filename.style.marginBottom = '15px';
+                
+                                    // const cancelButton = document.createElement('button');
+                                    // cancelButton.type = 'button';
+                                    // cancelButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                                    // cancelButton.innerHTML = 'Cancel';
+                                    // cancelButton.onclick = function () {
+                                    //     cancelImage(this, imagePreview);
+                                    // };
+                
+                                    imagePreview.appendChild(img);
+                                    imagePreview.appendChild(filename);
+                                    imagePreview.appendChild(cancelButton);
+                                    previewContainer.appendChild(imagePreview);
+                                };
+                
+                                reader.readAsDataURL(input.files[i]);
+                            }
+                        } else {
+                            // const noFileChosen = document.createElement('span');
+                            // noFileChosen.innerHTML = 'No file chosen';
+                            // noFileChosen.style.marginBottom = '10px';
+                            // previewContainer.appendChild(noFileChosen);
+
+                            const defaultImagePreview = document.createElement('div');
                                                     defaultImagePreview.classList.add('image-container');
                                                     const defaultImg = document.createElement('img');
                                                     defaultImg.src = '/uploadimage.svg';
@@ -188,81 +216,46 @@
                                                     defaultImg.classList.add('image-preview');
                                                     defaultImagePreview.appendChild(defaultImg);
                                                     previewContainer.appendChild(defaultImagePreview);
-                                                }
-                                            }
+                        }
+                    }
+                
+                    // function cancelImage(button, imageContainer) {
+                    //     imageContainer.remove(); // Remove the image container directly
+                
+                    //     // Check if all images are canceled to show "No file chosen"
+                    //     const previewContainer = document.querySelector('.image-preview-container');
+                    //     if (previewContainer.childElementCount === 0) {
+                    //         const noFileChosen = document.createElement('span');
+                    //         noFileChosen.innerHTML = 'No file chosen';
+                    //         noFileChosen.style.marginBottom = '10px';
+                    //         previewContainer.appendChild(noFileChosen);
+                    //     }
+                    // }
+                
+                   
+                </script>
 
-                                       
-    // function cancelImageSelection(button, imageIndex) {
-    //     const previewContainer = document.querySelector('.image-preview-container');
-    //     const deleteCheckbox = document.getElementById(`delete-checkbox${imageIndex}`);
-    //     previewContainer.removeChild(button.parentElement); // Remove the image container
-    //     deleteCheckbox.checked = false; // Uncheck the corresponding checkbox
-    // }
+                
 
-   
+<div id="invalid">
+    <% if (typeof message !=='undefined' && message) { %>
+        <p style="color: rgb(8, 96, 0);" id="message">
+            <%= message %>
+        </p>
+        <% } %>
+                      
+</div>
+</div> <!-- card end// -->
+</div>
 
-
-
-                                           
-                                        </script>
-                                    </div>
-                                </div>
-                            </div> 
-                          
-                        </div>
-
-              
-
-
-
-
-                <div id="invalid">
-                    <% if (typeof message !=='undefined' && message) { %>
-                        <p style="color: rgb(8, 96, 0);" id="message">
-                            <%= message %>
-                        </p>
-                        <% } %>
-                                      
-                </div>
-            </div> <!-- card end// -->
-            </div>
-
-            </div>
-        </section>
-    </form>
-
-
-<!-- 
-    <script>
-        let sizeCount = 0;
-
-        function addSize() {
-    sizeCount++;
-    const container = document.querySelector('.size-container');
-    const sizeDiv = document.createElement('div');
-    sizeDiv.classList.add('row', 'my-1');
-
-    sizeDiv.innerHTML = `
-        <div class="col-5">
-            <label for="size[${sizeCount}]">Size :</label>
-            <input type="text" name="sizes[${sizeCount}][size]" placeholder="Type here" class="form-control" id="size${sizeCount}">
-        </div>
-        <div class="col-5">
-            <label for="stock${sizeCount}">Stock:</label>
-            <input type="text" name="sizes[${sizeCount}][stock]" placeholder="Type here" class="form-control" id="stock${sizeCount}">
-        </div>
-        <div class="col-2 mt-4">
-                <button type="button" class="btn btn-danger " onclick="removeSize(this)">Remove</button>
-            </div>
-    `;
-
-    container.appendChild(sizeDiv);
-} -->
+</div>
+</section>
+</form>
 
 
 <script>
 
-        function displayImage(imageNumber, input) {
+function displayImage(imageNumber, input) {
             const preview = document.getElementById(`image-preview${imageNumber}`);
 
             if (input.files && input.files[0]) {
@@ -275,57 +268,12 @@
                 preview.src = '';
             }
         }
-        
-    function removeSize(button) {
-        const container = document.querySelector('.size-container');
-        const sizeDiv = button.parentElement.parentElement; // Get the parent div containing the size and stock fields.
-        container.removeChild(sizeDiv); // Remove the parent div from the container.
-    }
 
-    function viewImage(event, imageIndex) {
+        function viewImage(event, imageIndex) {
     const imgView = document.getElementById(`imgView${imageIndex}`);
     imgView.src = URL.createObjectURL(event.target.files[0]);
 }
 
-
-
-
-
-
-
- 
-function validationChecking() {
-        const product_title = document.getElementById("product_title").value;
-        const description = document.getElementById("description").value;
-        const product_price = document.getElementById("product_price").value;
-        const discount_price = document.getElementById("discount_price").value;
-        const product_category = document.querySelector('select[name="category"]').value.trim();
-    
-
- 
-
-}
-        const product_title_error = document.getElementById("product_title-error");
-        const description_error = document.getElementById("description-error");
-        const product_price_error= document.getElementById("product_price-error");
-        const product_category_error = document.getElementById("product_category-error");
-        const discount_price_error = document.getElementById("discount_price-error");
-
-        product_title_error.innerHTML = product_title.trim() === "" ? "Please enter product name" : "";
-        description_error.innerHTML = description.trim() === "" ? "Please enter product description" : "";
-        product_price_error.innerHTML = isNaN(product_price) || product_price.trim() === "" || parseFloat(product_price) < 0 ? "Please enter a valid price " : "";
-        product_category_error.innerHTML = product_category.trim() === "" ? "Please enter product category" : "";
-
-        discount_price_error.innerHTML = isNaN(discount_price) || discount_price.trim() === "" || parseFloat(discount_price) < 0 ? "Please enter a valid discount price " : "";
-
-
-       
-       
-        return !(product_title.trim() === "" || description.trim() === "" || product_price.trim() === ""|| discount_price.trim() === "" || product_category.trim() === ""); 
-       
-
-
-    </script>
-
+</script>
 
     <%- include('../Layouts/adminFooter.ejs') %>

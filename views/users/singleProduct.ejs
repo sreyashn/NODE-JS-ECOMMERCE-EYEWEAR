@@ -1,4 +1,6 @@
-﻿<style>
+﻿<%-include('../layouts/userHeader.ejs') %>
+
+<style>
     /* Increase the size of the increment and decrement buttons */
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
@@ -54,7 +56,6 @@
     }
 </style>
 
-<%-include('../layouts/userHeader.ejs') %>
 
 
 
@@ -62,7 +63,7 @@
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
-                <a href="index.html" rel="nofollow">Home</a>
+                <a href="/" rel="nofollow">Home</a>
                 <span></span> shop
                 <span></span> products
             </div>
@@ -131,8 +132,12 @@
                                     </div>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
-                                            <ins><span class="text-brand">₹<%= product.price %></span></ins>
-                                            <!-- <ins><span class="old-price font-md ml-15">₹<%= product.price %></span></ins> -->
+                                            <% if (product.discount && product.discount < product.price) { %>
+                                            <ins><span class="text-brand">₹<%= product.discount %></span></ins>
+                                            <ins><span class="old-price font-md ml-15">₹<%= product.price %></span></ins>
+                                            <% } else { %>
+                                                <ins><span class="text-brand">₹<%= product.price %></span></ins>
+                                            <% } %>
                                             <span class="save-price  font-md color3 ml-15">25% Off</span>
                                         </div>
                                     </div>

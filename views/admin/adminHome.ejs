@@ -1,100 +1,431 @@
-
-
-<%-include('../layouts/adminHeader.ejs') %>
+<%- include('../Layouts/adminHeader.ejs') %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <section class="content-main">
-    <div class="content-header">
-        <div>
-            <h2 class="content-title card-title">Admin Home </h2>
-          
-        </div>
-        <div>
-            <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="card card-body mb-4">
-                <article class="icontext">
-                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
-                    <div class="text">
-                        <h6 class="mb-1 card-title">Revenue</h6>
-                        <span>$13,456.5</span>
-                        <span class="text-sm">
-                            Shipping fees are not included
-                        </span>
-                    </div>
-                </article>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card card-body mb-4">
-                <article class="icontext">
-                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
-                    <div class="text">
-                        <h6 class="mb-1 card-title">Orders</h6> <span>53.668</span>
-                        <span class="text-sm">
-                            Excluding orders in transit
-                        </span>
-                    </div>
-                </article>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card card-body mb-4">
-                <article class="icontext">
-                    <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
-                    <div class="text">
-                        <h6 class="mb-1 card-title">Products</h6> <span>9.856</span>
-                        <span class="text-sm">
-                            In 19 Categories
-                        </span>
-                    </div>
-                </article>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card card-body mb-4">
-                <article class="icontext">
-                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
-                    <div class="text">
-                        <h6 class="mb-1 card-title">Monthly Earning</h6> <span>$6,982</span>
-                        <span class="text-sm">
-                            Based in your local time.
-                        </span>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-8 col-lg-12">
-            <div class="card mb-4">
-                <article class="card-body">
-                    <h5 class="card-title">Sale statistics</h5>
-                    <canvas id="myChart" height="120px"></canvas>
-                </article>
-            </div>
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="card mb-4">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="pagination-area mt-30 mb-50">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-start">
-                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#">16</a></li>
-                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-            </ul>
-        </nav>
-    </div>
-</section> <!-- content-main end// -->
+  <div class="content-header">
+      <div>
+          <h2 class="content-title card-title">Dashboard </h2>
+          <p>Whole data about your business here</p>
+      </div>
+      <div>
+          <a href="/admin/salesReport" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-lg-4">
+          <div class="card card-body mb-4">
+              <article class="icontext">
+                  <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                  <div class="text">
+                      <h6 class="mb-1 card-title">Revenue</h6>
+                      <span>₹<%= totalRevenue %></span>
+                      <span class="text-sm">
+                          Total Revenue.
+                      </span>
+                  </div>
+              </article>
+          </div>
+      </div>
 
-<%-include('../layouts/adminFooter.ejs') %>
+      <div class="col-lg-4">
+        <div class="card card-body mb-4">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Orders</h6> <span><%= totalOrders %></span>
+                    <span class="text-sm">
+                        Total number of orders.
+                    </span>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card card-body mb-4">
+          <article class="icontext">
+              <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+              <div class="text">
+                  <h6 class="mb-1 card-title">Products</h6> <span><%= totalProducts %></span>
+                  <span class="text-sm">
+                      In <%= totalCategories %> Categories
+                  </span>
+              </div>
+          </article>
+      </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card card-body mb-4">
+        <article class="icontext">
+            <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-person"></i></span>
+            <div class="text">
+                <h6 class="mb-1 card-title">Total Active Users</h6> <span>&nbsp; <%= totalUsers %></span>
+                <span class="text-sm">
+                    All the active users.
+                </span>
+            </div>
+        </article>
+    </div>
+</div>
+<div class="col-lg-4">
+    <div class="card card-body mb-4">
+        <article class="icontext">
+            <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
+            <div class="text">
+                <h6 class="mb-1 card-title">Total Categories</h6> <span>&nbsp; <%= totalCategories %></span>
+                <span class="text-sm">
+                  In <%= totalCategories %> Categories
+              </span>
+            </div>
+        </article>
+    </div>
+</div>
+<div class="col-lg-4">
+  <div class="card card-body mb-4">
+      <article class="icontext">
+          <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+          <div class="text">
+              <h6 class="mb-1 card-title">Monthly earning</h6> <span>₹&nbsp; <%= monthlyEarningsValue %></span>
+              <span class="text-sm">
+                  Total monthly earning.
+              </span>
+          </div>
+      </article>
+  </div>
+</div>
+
+
+      
+
+  </div>
+
+  <div class="row">
+    <div class="col-xl-8 col-lg-12">
+        <div class="card mb-4">
+            <article class="card-body">
+                <h5 class="card-title">Sale statistics</h5>
+                <input type="hidden" value="<%= dailyOrderCounts %>" id="dailyOrderArray" />
+                <input type="hidden" value="<%= monthlyOrderCounts %>" id="monthlySalesArray" />
+    
+                <input type="hidden" value="<%= yearlyOrderCounts %>" id="yearlyOrderCounts" />
+         
+                <button class="btn btn-xs   btn btn-sm btn-light font-xs rounded" onclick="displayChart('Weekly', this)">Weekly</button>
+                <button class="btn btn-sm btn-light font-xs rounded" onclick="displayChart('Monthly', this)">Monthly</button>
+                <button class="btn btn-sm btn-light font-xs rounded" onclick="displayChart('Yearly', this)">Yearly</button>
+                <canvas id="myChartWeekly" height="120px"></canvas>
+                <canvas id="myChartMonthly" height="120px" style="display: none;"></canvas>
+                <canvas id="myChartYearly" height="120px" style="display: none;"></canvas>
+            </article>
+        </div>
+       
+    </div>
+    <div class="col-xl-4 col-lg-12">
+      <div class="card mb-4">
+          <div class="card mb-4">
+              <article class="card-body">
+                  <h5 class="card-title">New Members</h5>
+                  <div class="new-member-list">
+
+                          <% newUsers.forEach((user) => { %>
+
+                      <div class="d-flex align-items-center justify-content-between mb-4">
+                          <div class="d-flex align-items-center">
+                              <img src="/userassets/imgs/user/<%= user.image %>" alt="" class="avatar">
+                              <div>
+                                  <h6><%= user.name %></h6>
+                                  <p class="text-muted font-xs">
+                                      Sanfrancisco
+                                  </p>
+                              </div>
+                          </div>
+                          <span class="badge badge-pill badge-soft-success">Active</span>                            </div>
+                      <% }); %>
+
+
+                      
+                  </div>
+              </article>
+          </div>
+      </div>
+      
+  </div>
+  
+    
+</div>
+<div class="card mb-4">
+  <header class="card-header">
+      <h4 class="card-title">Latest orders</h4>
+      
+  </header>
+  <div class="card-body">
+      <div class="table-responsive">
+          <div class="table-responsive">
+              <!-- <table class="table align-middle table-nowrap mb-0"> -->
+                  <table id="products" class="table align-middle table-nowrap mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">Order Id</th>
+                          <th scope="col">Billing Name</th>
+                          <th scope="col">Ordered Date</th>
+                          <th scope="col">Delivery Date</th>
+                          <th scope="col">Total</th>
+                         
+                        </tr>
+                      </thead>
+                      <tbody>
+                          
+                          <% orders.forEach((order) => { %>
+                              <tr>                    
+                                <td><%= order._id %></td>
+                                <% if (order.user) { %>
+                                    <td><%= order.user.name %></td>
+                                <% } else { %>
+                                    <td>User Not Available</td>
+                                <% } %>
+                                <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
+                                <td> <%= new Date(order.deliveryDate).toLocaleDateString() %></td>
+                                <td><%= order.totalAmount %></td>
+                               
+          
+          
+                             
+          
+                               
+                              </tr>
+                              <% }); %>
+          
+                      
+                      </tbody>
+                    </table>
+          </div>
+      </div> <!-- table-responsive end// -->
+  </div>
+</div>
+  
+</section> <!-- content-main end// -->
+<script>
+  // Functions to display respective charts
+  function displayChart(chartType, button) {
+  highlightButton(button);
+
+  if (chartType === 'Weekly') {
+      showChart('myChartWeekly');
+      hideChart('myChartMonthly');
+      hideChart('myChartYearly');
+  } else if (chartType === 'Monthly') {
+      hideChart('myChartWeekly');
+      showChart('myChartMonthly');
+      hideChart('myChartYearly');
+  } else if (chartType === 'Yearly') {
+      hideChart('myChartWeekly');
+      hideChart('myChartMonthly');
+      showChart('myChartYearly');
+  }
+}
+
+function showChart(chartId) {
+  document.getElementById(chartId).style.display = 'block';
+}
+
+function hideChart(chartId) {
+  document.getElementById(chartId).style.display = 'none';
+}
+
+function highlightButton(button) {
+
+  const buttons = document.querySelectorAll('.btn');
+  buttons.forEach(btn => btn.classList.remove('btn-xs'));
+
+  button.classList.add('btn-xs');
+}
+
+
+</script>  
+
+<script>
+    (function ($) {
+    "use strict";
+    let dailyOrderArray = document.getElementById("dailyOrderArray").value;
+
+console.log('1');
+    dailyOrderArray = dailyOrderArray.trim(); // Remove leading and trailing whitespace
+    console.log('2');
+    dailyOrderArray = dailyOrderArray.split(",");
+    console.log('3');
+    dailyOrderArray = dailyOrderArray.map((item) => Number(item));
+    console.log('4');
+    dailyOrderArray = Array(dailyOrderArray);
+    console.log('5');
+    dailyOrderArray = dailyOrderArray[0];
+    console.log(dailyOrderArray,"dailyOrderArray123");
+  
+        if ($('#myChartWeekly').length) {
+            var ctx = document.getElementById('myChartWeekly').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+    
+                data: {
+                    labels: [
+                      
+                            'Monday',
+                            'Tuesday',
+                            'Wednesday',
+                            'Thursday',
+                            'Friday',
+                            'Saturday',
+                            'Sunday'
+                        
+                    ],
+                    datasets: [{
+                            label: 'Weekly',
+                            tension: 0.3,
+                            fill: true,
+                            backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                            borderColor: 'rgba(44, 120, 220)',
+                            data: dailyOrderArray
+                        }
+    
+                    ]
+                },
+             
+                options: {
+                    plugins: {
+                    legend: {
+                        labels: {
+                        usePointStyle: true,
+                        
+                        },
+                    }
+                    }
+                }
+            });
+        } 
+    
+    
+        
+    })(jQuery);
+    
+
+
+    (function ($) {
+        "use strict";
+        let monthlySalesArray = document.getElementById("monthlySalesArray").value;
+ 
+        monthlySalesArray = monthlySalesArray.trim(); // Remove leading and trailing whitespace
+        monthlySalesArray = monthlySalesArray.split(",");
+        monthlySalesArray = monthlySalesArray.map((item) => Number(item));
+        monthlySalesArray = Array(monthlySalesArray);
+        monthlySalesArray = monthlySalesArray[0];
+    
+        if ($('#myChartWeekly').length) {
+            var ctx = document.getElementById('myChartMonthly').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+    
+                data: {
+                    labels: [
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                      ],
+                    datasets: [{
+                        label: 'Monthly',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(4, 209, 130, 0.2)',
+                        borderColor: 'rgb(4, 209, 130)',
+                            data: monthlySalesArray
+                        }
+    
+                    ]
+                },
+             
+                options: {
+                    plugins: {
+                    legend: {
+                        labels: {
+                        usePointStyle: true,
+                        
+                        },
+                    }
+                    }
+                }
+            });
+        } 
+    
+    
+        
+    })(jQuery);
+
+     
+    (function ($) {
+        "use strict";
+        let yearlyOrderCounts = document.getElementById("yearlyOrderCounts").value;
+    
+        yearlyOrderCounts = yearlyOrderCounts.trim(); // Remove leading and trailing whitespace
+        yearlyOrderCounts = yearlyOrderCounts.split(",");
+        yearlyOrderCounts = yearlyOrderCounts.map((item) => Number(item));
+        yearlyOrderCounts = Array(yearlyOrderCounts);
+        yearlyOrderCounts = yearlyOrderCounts[0];
+    
+        if ($('#myChartYearly').length) {
+            var ctx = document.getElementById('myChartYearly').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+            
+         
+                data: {
+                    labels: [
+                        2017, 2018,
+                        2019, 2020,
+                        2021, 2022,
+                        2023
+                      ],
+                    datasets: [
+                     
+                        {
+                            label: 'Yearly',
+                            tension: 0.3,
+                            fill: true,
+                            backgroundColor: 'rgba(380, 200, 230, 0.2)',
+                            borderColor: 'rgb(380, 200, 230)',
+                            data: yearlyOrderCounts 
+                        }
+    
+                    ]
+                },
+                options: {
+                    plugins: {
+                    legend: {
+                        labels: {
+                        usePointStyle: true,
+                        
+                        },
+                    }
+                    }
+                }
+            });
+        } 
+    
+    
+        
+    })(jQuery);
+</script>
+
+    <%- include('../Layouts/adminFooter.ejs') %>
+
+
+
+    
+    
+   
+  
