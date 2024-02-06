@@ -1,9 +1,9 @@
 const User = require("../../model/userModel");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const Category = require("../../model/categoryModel")
 const Product = require("../../model/productModel")
 const message = require("../../config/mailer")
-const Wallet=require("../../model/walletModel")
+const Wallet = require("../../model/walletModel")
 
 
 let newUser;
@@ -16,39 +16,39 @@ const securePassword = async (password) => {
   }
 };
 
-const loadRegister =async(req,res) =>{
-  try{
+const loadRegister = async (req, res) => {
+  try {
     referral = req.query.referralCode;
-    console.log(referral,"referral");
-    res.render("users/registration",referral);
-  }catch(error){
+    console.log(referral, "referral");
+    res.render("users/registration", referral);
+  } catch (error) {
     console.log(error.message);
   }
 };
 
 // post register
 
-const insertUser = async (req,res) => {
+const insertUser = async (req, res) => {
   try {
     const email = req.body.email;
     const mobile = req.body.mobile;
     const name = req.body.name;
     const password = req.body.password;
-    
-    if(!email||!mobile||!name || !password) {
-      return res.render("users/registration",{
-        message:"Please fill all the fields",
+
+    if (!email || !mobile || !name || !password) {
+      return res.render("users/registration", {
+        message: "Please fill all the fields",
       });
     }
 
     req.session.referralCode = req.body.referralCode || null;
     const referralCode = req.session.referralCode;
-    console.log(referralCode,"referralCode");
-    const existMail = await User.findOne({email:email});
+    console.log(referralCode, "referralCode");
+    const existMail = await User.findOne({ email: email });
 
     if (referralCode) {
-      referrer = await User.findOne({ referralCode:referralCode });
-      console.log(referrer,"referrer");
+      referrer = await User.findOne({ referralCode: referralCode });
+      console.log(referrer, "referrer");
 
       if (!referrer) {
         res.render("users/registration", { message: "Invalid referral code." });
@@ -58,13 +58,13 @@ const insertUser = async (req,res) => {
         res.render("users/registration", {
           message: "Referral code has already been used by this email.",
         });
-      }else{
-        referrer = await User.findOne({ referralCode:referralCode });
-        console.log("............",referrer);
+      } else {
+        referrer = await User.findOne({ referralCode: referralCode });
+        console.log("............", referrer);
         referrerId = referrer._id
 
-        referrerWallet = await Wallet.findOne({user:referrerId})
-        console.log("////////////",referrerWallet);
+        referrerWallet = await Wallet.findOne({ user: referrerId })
+        console.log("////////////", referrerWallet);
         if (!referrerWallet) {
           // If wallet doesn't exist, create a new one
           referrerWallet = new Wallet({
@@ -80,20 +80,20 @@ const insertUser = async (req,res) => {
             amount: 50,
           });
         }
-        
+
         await referrerWallet.save();
       }
     }
 
-    if(existMail){
-      res.render("users/registration",{ message : "this user already exists"});
+    if (existMail) {
+      res.render("users/registration", { message: "this user already exists" });
     } else {
       req.session.userData = req.body;
-      console.log("////....",req.session.userData);
+      console.log("////....", req.session.userData);
       req.session.register = 1;
       req.session.email = email;
-      if(req.session.email) {
-        const data = await message.sendVarifyMail(req,req.session.email);
+      if (req.session.email) {
+        const data = await message.sendVarifyMail(req, req.session.email);
         res.redirect("/otp");
       }
     }
@@ -135,8 +135,8 @@ const verifyOtp = async (req, res) => {
         const userDataSave = await user.save();
         if (userDataSave && userDataSave.isAdmin === 0) {
           req.session.user_id = userDataSave._id;
-          if(userData.referralCode){
-            referrer = await User.findOne({ referralCode:userData.referralCode });
+          if (userData.referralCode) {
+            referrer = await User.findOne({ referralCode: userData.referralCode });
             referrer.userReferred = req.session.user_id
             await referrer.save()
 
@@ -147,7 +147,7 @@ const verifyOtp = async (req, res) => {
             });
 
             await referrerWallet.save()
-        }
+          }
           res.redirect("/login");
         } else {
           res.render("users/otp", { errorMessage: "Registration Failed" });
@@ -181,17 +181,17 @@ const resendOtp = async (req, res) => {
 
 
 
- // login user method
- const loginLoad = async (req, res) => {
-   try {
-   
+// login user method
+const loginLoad = async (req, res) => {
+  try {
+
     res.render("users/login");
   } catch (error) {
     console.log(error.message);
   }
- };
+};
 
- const verifyLogin = async (req, res) => {
+const verifyLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -230,7 +230,7 @@ const resendOtp = async (req, res) => {
 
 
 // forgot password
-const loadForgotpassword = async (req,res) => {
+const loadForgotpassword = async (req, res) => {
   try {
     res.render("users/forgotPassword");
   } catch (error) {
@@ -238,64 +238,64 @@ const loadForgotpassword = async (req,res) => {
   }
 };
 
- const forgotPasswordotp = async (req,res) =>{
-   try {
-     const emaildata = req.body.email;
-     console.log("Email received:",emaildata);
+const forgotPasswordotp = async (req, res) => {
+  try {
+    const emaildata = req.body.email;
+    console.log("Email received:", emaildata);
 
-     const userExist = await User.findOne({email: emaildata});
-     req.session.userData=userExist;
-     req.session.user_id = userExist._id;
-     if(userExist) {
-       const data = await message.sendVarifyMail(req,userExist.email);
-       return res.redirect("/otp");
-     } else {
+    const userExist = await User.findOne({ email: emaildata });
+    req.session.userData = userExist;
+    req.session.user_id = userExist._id;
+    if (userExist) {
+      const data = await message.sendVarifyMail(req, userExist.email);
+      return res.redirect("/otp");
+    } else {
 
-      res.render("users/forgotPassword",{
+      res.render("users/forgotPassword", {
         error: "Attempt Failed",
-         User: null,
-       });
-     }
-   }  catch (error) {
-     console.log("Error:", error.message);
-   }
+        User: null,
+      });
     }
+  } catch (error) {
+    console.log("Error:", error.message);
+  }
+}
 
-const loadResetPassword = async (req,res) => {
+const loadResetPassword = async (req, res) => {
   try {
     if (req.session.user_id) {
       const userId = req.session.user_id;
       const user = await User.findById(userId);
 
-      res.render("users/resetPassword",{ user: user });
-      
+      res.render("users/resetPassword", { user: user });
+
     } else {
-       res.redirect("/forgotPassword");
+      res.redirect("/forgotPassword");
     }
   } catch (error) {
-     console.log(error.message);
+    console.log(error.message);
   }
 
- };
+};
 
- const resetPassword =async (req,res) =>{
-   try {
-     const user_id = req.session.user_id;
-     const password = req.body.password;
-     const secure_password = await securePassword(password);
-     const updateData = await  User.findByIdAndUpdate(
-       { _id: user_id},
-       { $set: { password: secure_password} }
-     );
-      res.redirect("/");
-     
-   } catch (error) {
-     console.log(error.message);
-   }
- };
+const resetPassword = async (req, res) => {
+  try {
+    const user_id = req.session.user_id;
+    const password = req.body.password;
+    const secure_password = await securePassword(password);
+    const updateData = await User.findByIdAndUpdate(
+      { _id: user_id },
+      { $set: { password: secure_password } }
+    );
+    res.redirect("/");
+
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 
- 
+
 const loadWallets = async (req, res) => {
   try {
     const userId = req.session.user_id;
@@ -305,10 +305,10 @@ const loadWallets = async (req, res) => {
       return res.render("users/login", { userData: null });
     }
     const page = parseInt(req.query.page) || 1;
- 
+
     const limit = 6;
     const totalCount = await Product.countDocuments();
-    
+
     const totalPages = Math.ceil(totalCount / limit);
 
     const walletData = await Wallet.findOne({ user: userId }).sort({ date: -1 })
@@ -318,11 +318,13 @@ const loadWallets = async (req, res) => {
       .limit(limit);;
 
     if (!walletData) {
-      return res.render("users/wallet", { userData, wallet: null,currentPage: 0 ,totalPages:0 });
+      return res.render("users/wallet", { userData, wallet: null, currentPage: 0, totalPages: 0 });
     }
 
-    res.render("users/wallet", { userData, wallet: walletData, totalPages ,
-      currentPage: page, });
+    res.render("users/wallet", {
+      userData, wallet: walletData, totalPages,
+      currentPage: page,
+    });
 
   } catch (err) {
     console.error("Error in loadWallets route:", err);
@@ -330,21 +332,19 @@ const loadWallets = async (req, res) => {
   }
 };
 
-const loadHome = async (req,res) =>{
+const loadHome = async (req, res) => {
   try {
     const userId = req.session.user_id;
 
     const userData = await User.findById(userId);
     const productData = await Product.find();
     const categories = await Category.find();
-    const banner = await Banner.find();
-    console.log(banner);
 
-    if(userData) {
-     
-      res.render("users/home",{userData, products: productData, categories,banner: banner || [],});
+    if (userData) {
+
+      res.render("users/home", { userData, products: productData, categories, banner: [] });
     } else {
-      res.render("users/home",{ userData: null,products: productData, categories,banner: [],});
+      res.render("users/home", { userData: null, products: productData, categories, banner: [] });
     }
   } catch (error) {
     console.log(error.message);
@@ -356,11 +356,11 @@ const loadAbout = async (req, res) => {
     const userId = req.session.user_id;
 
     const userData = await User.findById(userId);
-  
+
     if (userData) {
-      res.render("users/about", {  userData,  });
+      res.render("users/about", { userData, });
     } else {
-      res.render("users/about", { userData: null,  });
+      res.render("users/about", { userData: null, });
     }
   } catch (error) {
     console.log(error.message);
@@ -372,11 +372,11 @@ const loadContact = async (req, res) => {
     const userId = req.session.user_id;
 
     const userData = await User.findById(userId);
-  
+
     if (userData) {
-      res.render("users/contact", {  userData,  });
+      res.render("users/contact", { userData, });
     } else {
-      res.render("users/contact", { userData: null,  });
+      res.render("users/contact", { userData: null, });
     }
   } catch (error) {
     console.log(error.message);
@@ -391,14 +391,14 @@ const loadShop = async (req, res) => {
     const categories = await Category.find();
     const page = parseInt(req.query.page) || 1;
 
-    
+
     const limit = 6;
     const totalCount = await Product.countDocuments();
 
     const totalPages = Math.ceil(totalCount / limit);
     const productData = await Product.find().skip((page - 1) * limit).limit(limit);
 
-    res.render("users/shop", { products: productData, userData, categories,totalPages, currentPage: page,});
+    res.render("users/shop", { products: productData, userData, categories, totalPages, currentPage: page, });
   } catch (error) {
     console.log(error.message);
   }
@@ -410,15 +410,15 @@ const loadShopCategory = async (req, res) => {
     const userData = await User.findById(userId);
     const categoryId = req.query.id;
     const page = parseInt(req.query.page) || 1;
- 
+
     const limit = 6;
-    const totalCount = await Product.countDocuments({category:categoryId});
-    
+    const totalCount = await Product.countDocuments({ category: categoryId });
+
     const totalPages = Math.ceil(totalCount / limit);
-    const productData = await Product.find({category:categoryId}).skip((page - 1) * limit)
-    .limit(limit);
+    const productData = await Product.find({ category: categoryId }).skip((page - 1) * limit)
+      .limit(limit);
     const categories = await Category.find();
-    res.render("users/shop", { products: productData, userData, categories,totalPages,currentPage: page,  });
+    res.render("users/shop", { products: productData, userData, categories, totalPages, currentPage: page, });
 
   } catch (error) {
     console.log(error.message);
@@ -476,19 +476,19 @@ const userEdit = async (req, res) => {
 
     const { name, mobile } = req.body;
 
-    if(!req.file){
+    if (!req.file) {
       const updateData = await User.findByIdAndUpdate(
         { _id: id },
         {
           $set: {
             name,
             mobile,
-       
+
           },
         }
       );
     }
-    else{
+    else {
       const updateData = await User.findByIdAndUpdate(
         { _id: id },
         {
@@ -506,7 +506,7 @@ const userEdit = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};    
+};
 
 
 
@@ -542,9 +542,9 @@ const updateUserProfilepic = async (req, res) => {
 
 
 
-const userLogout = async (req,res) => {
+const userLogout = async (req, res) => {
   try {
-    req.session.user_id =null
+    req.session.user_id = null
     res.redirect("/login");
   } catch (error) {
     console.log(error.message);
@@ -554,26 +554,26 @@ const userLogout = async (req,res) => {
 
 module.exports = {
   loadRegister,
-   insertUser,
-   loginLoad,
-   verifyLogin,
-   loadForgotpassword,
-   forgotPasswordotp,
-   loadWallets,
-   loadHome,
-   userLogout,
-   loadResetPassword,
-   resetPassword,
-   loadAbout,
-   loadContact,
-   loadShop,
-   loadShopCategory,
-   loadSingleShop,
-   loadprofile,
-   userEdit,
-   loadOtp,
-   verifyOtp,
-   resendOtp,
-   updateUserProfilepic
+  insertUser,
+  loginLoad,
+  verifyLogin,
+  loadForgotpassword,
+  forgotPasswordotp,
+  loadWallets,
+  loadHome,
+  userLogout,
+  loadResetPassword,
+  resetPassword,
+  loadAbout,
+  loadContact,
+  loadShop,
+  loadShopCategory,
+  loadSingleShop,
+  loadprofile,
+  userEdit,
+  loadOtp,
+  verifyOtp,
+  resendOtp,
+  updateUserProfilepic
 };
 

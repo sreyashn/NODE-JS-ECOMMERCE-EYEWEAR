@@ -1,9 +1,10 @@
 const express = require("express");
-const session =require('express-session');
+const session = require('express-session');
 const mongoose = require("mongoose");
 const config = require("./config/config");
+require('dotenv').config()
 // mongoose.connect("mongodb://127.0.0.1:27017/e-commerce");
-mongoose.connect("mongodb+srv://sreya6384:dily6BeAzHvkHaWy@cluster0.vnvfk9p.mongodb.net/e-commerce");
+mongoose.connect(process.env.MONGO_URL);
 
 const userRoute = require("./routes/userRoute");
 const adminRoute = require("./routes/adminRoute");
@@ -12,7 +13,7 @@ const path = require("path");
 const app = express();
 
 app.set("view engine", "ejs");
-app.set("views","./views");
+app.set("views", "./views");
 
 
 app.use(
@@ -20,7 +21,7 @@ app.use(
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: true,
-  
+
   })
 );
 
@@ -40,13 +41,12 @@ app.use(express.static(path.join(__dirname, "public/assets")));
 app.use(express.static(path.join(__dirname, "public/user-assets")));
 
 // for user route
-app.use("/",userRoute);
+app.use("/", userRoute);
 // for admin  route
-app.use("/admin",adminRoute);
+app.use("/admin", adminRoute);
 
 app.listen(5000, function () {
-    console.log(
-      "Server is running...Registration Page at http://localhost:5000"
-    );
-  });
-  
+  console.log(
+    "Server is running...Registration Page at http://localhost:5000"
+  );
+});
