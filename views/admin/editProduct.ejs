@@ -121,7 +121,7 @@
 
                 </div>
 
-                 <div class="card mb-4">
+                <div class="card mb-4">
                     <div class="card-header">
                         <h4>Picture</h4>
                     </div>
@@ -134,7 +134,7 @@
                                         <% if (product.image && product.image.length > 0) { %>
                                             <% for (let i = 0; i < product.image.length; i++) { %>
                                                 <div class="image-container border-1 mb-4">
-                                                    <input type="checkbox" id="delete-checkbox<%= i %>" name="deletecheckbox" value="<%= i%>"  onchange="handleDeleteCheckbox(this)">
+                                                    <input type="checkbox" id="delete-checkbox<%= i %>" name="deletecheckbox" value="<%= i%>">
                                                     <label for="delete-checkbox<%= i %>">Delete</label>
                                                     <img class="image-preview"  src="/assets/imgs/product/<%= product.image[i] %>" alt="Default">
                                                 </div>
@@ -145,7 +145,7 @@
                                             </div>
                                         <% } %>
                                     </div>
-                                    <input class="form-control" name="image" multiple="multiple" type="file"  onchange="displayImages(this)">
+                                    <input class="form-control" name="image" multiple="multiple" type="file" onchange="displayImages(this)">
                                 
                                 <div class="error-message" style="color: red;" id="product_image-error"></div>
                             </div>
@@ -184,7 +184,15 @@
                 
                                     const filename = document.createElement('span');
                                     filename.innerHTML = input.files[i].name;
-                                    filename.style.marginBottom = '15px'; 
+                                    filename.style.marginBottom = '15px';
+                
+                                    // const cancelButton = document.createElement('button');
+                                    // cancelButton.type = 'button';
+                                    // cancelButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                                    // cancelButton.innerHTML = 'Cancel';
+                                    // cancelButton.onclick = function () {
+                                    //     cancelImage(this, imagePreview);
+                                    // };
                 
                                     imagePreview.appendChild(img);
                                     imagePreview.appendChild(filename);
@@ -195,6 +203,11 @@
                                 reader.readAsDataURL(input.files[i]);
                             }
                         } else {
+                            // const noFileChosen = document.createElement('span');
+                            // noFileChosen.innerHTML = 'No file chosen';
+                            // noFileChosen.style.marginBottom = '10px';
+                            // previewContainer.appendChild(noFileChosen);
+
                             const defaultImagePreview = document.createElement('div');
                                                     defaultImagePreview.classList.add('image-container');
                                                     const defaultImg = document.createElement('img');
@@ -208,43 +221,64 @@
                         }
                     }
                 
-                     </script> 
+                    // function cancelImage(button, imageContainer) {
+                    //     imageContainer.remove(); // Remove the image container directly
+                
+                    //     // Check if all images are canceled to show "No file chosen"
+                    //     const previewContainer = document.querySelector('.image-preview-container');
+                    //     if (previewContainer.childElementCount === 0) {
+                    //         const noFileChosen = document.createElement('span');
+                    //         noFileChosen.innerHTML = 'No file chosen';
+                    //         noFileChosen.style.marginBottom = '10px';
+                    //         previewContainer.appendChild(noFileChosen);
+                    //     }
+                    // }
+                
+                   
+                </script>
+
+                
+
+<div id="invalid">
+    <% if (typeof message !=='undefined' && message) { %>
+        <p style="color: rgb(8, 96, 0);" id="message">
+            <%= message %>
+        </p>
+        <% } %>
+                      
+</div>
+</div> <!-- card end// -->
+</div>
+
+</div>
+</section>
+</form>
+
 
 <script>
 
+function displayImage(imageNumber, input) {
+            const preview = document.getElementById(`image-preview${imageNumber}`);
 
-  function handleDeleteCheckbox(checkbox) {
-    if (checkbox.checked) {
-        // Trigger deletion immediately
-        const imageContainer = checkbox.parentNode;
-        if (imageContainer.classList.contains('image-container')) {
-            const imageIndex = checkbox.value;
-            deleteImage(imageIndex);
-            // Remove the image container from the DOM
-            imageContainer.remove();
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = '';
+            }
         }
-    }
-}
-    
-   async function deleteImage(imageIndex) {
-    try {
-        const response = await fetch(`/deleteImage/${imageIndex}`, {
-            method: 'DELETE'
-        });
-        if (response.ok) {
-            console.log('Image deleted successfully');
-            // Optionally update UI to reflect image deletion
-        } else {
-            console.error('Failed to delete image');
-        }
-    } catch (error) {
-        console.error('Error deleting image:', error);
-    }
+
+        function viewImage(event, imageIndex) {
+    const imgView = document.getElementById(`imgView${imageIndex}`);
+    imgView.src = URL.createObjectURL(event.target.files[0]);
 }
 
+</script>
 
-    </script>   
-
+    <%- include('../Layouts/adminFooter.ejs') %>
 <!-- 
                 
             <div class="col-lg-3">
@@ -388,7 +422,7 @@
 </form>
 
 
-<script>
+<!-- <script>
 
 function displayImage(imageNumber, input) {
             const preview = document.getElementById(`image-preview${imageNumber}`);
@@ -411,4 +445,4 @@ function displayImage(imageNumber, input) {
 
 </script>
 
-    <%- include('../Layouts/adminFooter.ejs') %>
+    <%- include('../Layouts/adminFooter.ejs') %> -->

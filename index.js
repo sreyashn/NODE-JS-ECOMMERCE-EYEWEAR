@@ -3,8 +3,8 @@ const session = require('express-session');
 const mongoose = require("mongoose");
 const config = require("./config/config");
 require('dotenv').config()
-// mongoose.connect("mongodb://127.0.0.1:27017/e-commerce");
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect("mongodb://127.0.0.1:27017/e-commerce");
+// mongoose.connect(process.env.MONGO_URL);
 
 const userRoute = require("./routes/userRoute");
 const adminRoute = require("./routes/adminRoute");
