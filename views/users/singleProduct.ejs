@@ -167,9 +167,9 @@
                                         </ul>
                                     </div>
                                     <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                                    <form action="/cart" method="post">
+                                    <!-- <form action="/cart" method="post">
                                         <input type="hidden" value="<%= product._id %>"name="productData_id" id="">
-                                        <div class="detail-extralink">
+                                        <div class="detail-extralink"> -->
                                             <% if (product.stock > 0) { %>
                                                 <form action="/cart" method="post">
                                                     <input type="hidden" value="<%= product._id %>" name="productData_id">
@@ -181,8 +181,8 @@
                                             <% } else { %>
                                                 <p class="text-danger">Out of Stock</p>
                                             <% } %>
-                                        </div>
-                                    </form>
+                                        <!-- </div> -->
+                                    <!-- </form> -->
 
                                     <ul class="product-meta font-xs color-grey mt-50">
                                         <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
