@@ -383,26 +383,53 @@ const loadContact = async (req, res) => {
   }
 };
 
+// const loadShop = async (req, res) => {
+//   try {
+//     const userId = req.session.user_id;
+//     const userData = await User.findById(userId);
+
+//     const categories = await Category.find();
+//     const page = parseInt(req.query.page) || 1;
+
+
+//     const limit = 6;
+//     const totalCount = await Product.countDocuments();
+
+//     const totalPages = Math.ceil(totalCount / limit);
+//     const productData = await Product.find().skip((page - 1) * limit).limit(limit);
+
+//     res.render("users/shop", { products: productData, userData, categories, totalPages, currentPage: page, });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
 const loadShop = async (req, res) => {
   try {
-    const userId = req.session.user_id;
-    const userData = await User.findById(userId);
+      // const userId = req.session.user_id;
+      // const userData = await User.findById(userId);
+      const userData = ""
+      const categories = await Category.find();
+      const page = parseInt(req.query.page) || 1;
+      const limit = 6;
 
-    const categories = await Category.find();
-    const page = parseInt(req.query.page) || 1;
+      // Count only the products that are listed
+      const totalCount = await Product.countDocuments({ is_listed: true });
 
+      const totalPages = Math.ceil(totalCount / limit);
+      
+      // Find and fetch only the products that are listed, with pagination
+      const productData = await Product.find({ is_listed: true }).skip((page - 1) * limit).limit(limit);
 
-    const limit = 6;
-    const totalCount = await Product.countDocuments();
-
-    const totalPages = Math.ceil(totalCount / limit);
-    const productData = await Product.find().skip((page - 1) * limit).limit(limit);
-
-    res.render("users/shop", { products: productData, userData, categories, totalPages, currentPage: page, });
+      res.render("users/shop", { products: productData, 
+        userData, 
+        categories, totalPages, currentPage: page });
   } catch (error) {
-    console.log(error.message);
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
   }
 };
+
 
 const loadShopCategory = async (req, res) => {
   try {

@@ -9,6 +9,7 @@ const { log } = require("console");
 const loadProducts = async (req, res) => {
     try {
       const products = await Product.find();
+      console.log(products);
       const categories = await Category.find();
       res.render("admin/products", { products, categories });
     } catch (error) {
@@ -166,19 +167,36 @@ const editProduct = async (req, res) => {
 
 
 const deleteProduct = async (req, res) => {
+  // try {
+  //   const id = req.query.id;
+  //   const productData = await Product.findByIdAndUpdate(
+  //     { _id: id },
+  //     {
+  //       $set: {
+  //         is_listed: false,
+  //       },
+  //     }
+  //   );
+  //   res.redirect("/admin/products");
+  // } catch (error) {
+  //   console.log(error.message);
+  // }
   try {
     const id = req.query.id;
-    const productData = await Product.findByIdAndUpdate(
-      { _id: id },
-      {
-        $set: {
-          is_listed: false,
-        },
-      }
-    );
+
+    const productData = await Product.findById(id);
+
+    if (!productData) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    productData.is_listed = !productData.is_listed;
+    await productData.save();
+
     res.redirect("/admin/products");
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
 

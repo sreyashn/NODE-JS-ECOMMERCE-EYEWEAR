@@ -57,6 +57,15 @@
                                         <!-- <div class="product-badges product-badges-position product-badges-mrg">
                                             <span class="hot">Hot</span>
                                         </div> -->
+                                        <% function calculatePercentage(price, discountPrice) {
+                                            if (discountPrice && discountPrice < price) {
+                                                const discountPercentage = ((price - discountPrice) / price) * 100;
+                                                return discountPercentage.toFixed(2); // Adjust the decimal places as needed
+                                            } else {
+                                                return ''; 
+                                            }
+                                        } %>
+                                    
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
@@ -65,7 +74,11 @@
                                         <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
                                         <div class="rating-result" >
                                             <span>
-                                                <span><%= product.percentage %></span>
+                                                <% const discountPercentage = calculatePercentage(product.price, product.discount); %>
+                                                <% if (discountPercentage) { %>
+                                                    <span><%= discountPercentage %></span>
+                                                    <span>%</span>
+                                                <% } %>
                                             </span>
                                         </div>
                                         <!-- <div class="product-price"> -->
