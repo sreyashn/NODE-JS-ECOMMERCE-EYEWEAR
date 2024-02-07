@@ -74,116 +74,65 @@ const loadCartPage = async (req, res) => {
   }
 
 
-  // const addTocart = async (req, res) => {
-  //   try {
-  //     const userId = req.session.user_id;
-  //     const product_Id = req.body.productData_id;
-  //     console.log(product_Id,"productData_id");
-  //     const { qty } = req.body;
-  
-  //     const existingCart = await Cart.findOne({ user: userId });
-  //     console.log(existingCart,"existingCart");
-  
-  //     const productToUpdate = await Product.findById(product_Id);
-  
-  
-  //     if (productToUpdate) {
-       
-  //       if (productToUpdate.stock >= parseInt(qty)) {
-  //         if (existingCart) {
-  //           const existingCartItem = existingCart.items.find(
-  //             (item) => item.product._id.toString() === product_Id
-  //           );
-  
-  //           if (existingCartItem) {
-  //             existingCartItem.quantity += parseInt(qty);
-  //           } else {
-  //             existingCart.items.push({
-  //               product: product_Id,
-  //               quantity: parseInt(qty),
-  //             });
-  //           }
-  //           existingCart.total = existingCart.items.reduce(
-  //             (total, item) => total + (item.quantity || 0),
-  //             0
-  //           );
-  
-  //           await existingCart.save();
-  //           //  res.render("users/cart",{  userData: userData,cart: null, message: 'Cart updated successfully' });
-  //         } else {
-  //           const newCart = new Cart({
-  //             user: userId,
-  //             items: [{ product: product_Id, quantity: parseInt(qty) }],
-  //             total: parseInt(qty, 10),
-  //           });
-  //           await newCart.save();
-  //           // return res.status(200).json({ success: true, message: 'New cart created successfully' });
-  //         }
-  //       } else {
-  //         return res.status(400).json({ success: false, message: 'Out of stock or invalid quantity' });
-  //       }
-  //     } else {
-  //       return res.status(400).json({ success: false, message: 'Product not found' });
-  //     }
-  //     res.redirect('/cart')
-  //   } catch (error) {
-  //     console.error("Error adding product to cart:", error);
-  //     return res.status(500).json({ success: false, message: 'Internal server error' });
-  //   }
-  // };
-
-
   const addTocart = async (req, res) => {
     try {
-        const userId = req.session.user_id;
-        const productIds = req.body.productData_id; // Assuming productData_id is an array of product IDs
-        const { qty } = req.body;
-
-        const existingCart = await Cart.findOne({ user: userId });
-
-        // Iterate over each product ID in the array
-        for (const productId of productIds) {
-            const productToUpdate = await Product.findById(productId);
-
-            if (productToUpdate && productToUpdate.stock >= parseInt(qty)) {
-                if (existingCart) {
-                    const existingCartItem = existingCart.items.find(
-                        (item) => item.product.toString() === productId
-                    );
-
-                    if (existingCartItem) {
-                        existingCartItem.quantity += parseInt(qty);
-                    } else {
-                        existingCart.items.push({
-                            product: productId,
-                            quantity: parseInt(qty),
-                        });
-                    }
-                    existingCart.total = existingCart.items.reduce(
-                        (total, item) => total + (item.quantity || 0),
-                        0
-                    );
-
-                    await existingCart.save();
-                } else {
-                    const newCart = new Cart({
-                        user: userId,
-                        items: [{ product: productId, quantity: parseInt(qty) }],
-                        total: parseInt(qty, 10),
-                    });
-                    await newCart.save();
-                }
+      const userId = req.session.user_id;
+      const product_Id = req.body.productData_id;
+      console.log(product_Id,"productData_id");
+      const { qty } = req.body;
+  
+      const existingCart = await Cart.findOne({ user: userId });
+      console.log(existingCart,"existingCart");
+  
+      const productToUpdate = await Product.findById(product_Id);
+  
+  
+      if (productToUpdate) {
+       
+        if (productToUpdate.stock >= parseInt(qty)) {
+          if (existingCart) {
+            const existingCartItem = existingCart.items.find(
+              (item) => item.product._id.toString() === product_Id
+            );
+  
+            if (existingCartItem) {
+              existingCartItem.quantity += parseInt(qty);
             } else {
-                return res.status(400).json({ success: false, message: 'Out of stock or invalid quantity' });
+              existingCart.items.push({
+                product: product_Id,
+                quantity: parseInt(qty),
+              });
             }
+            existingCart.total = existingCart.items.reduce(
+              (total, item) => total + (item.quantity || 0),
+              0
+            );
+  
+            await existingCart.save();
+            //  res.render("users/cart",{  userData: userData,cart: null, message: 'Cart updated successfully' });
+          } else {
+            const newCart = new Cart({
+              user: userId,
+              items: [{ product: product_Id, quantity: parseInt(qty) }],
+              total: parseInt(qty, 10),
+            });
+            await newCart.save();
+            // return res.status(200).json({ success: true, message: 'New cart created successfully' });
+          }
+        } else {
+          return res.status(400).json({ success: false, message: 'Out of stock or invalid quantity' });
         }
-
-        res.redirect('/cart');
+      } else {
+        return res.status(400).json({ success: false, message: 'Product not found' });
+      }
+      res.redirect('/cart')
     } catch (error) {
-        console.error("Error adding product to cart:", error);
-        return res.status(500).json({ success: false, message: 'Internal server error' });
+      console.error("Error adding product to cart:", error);
+      return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-};
+  };
+
+
 
 
 
