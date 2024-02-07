@@ -30,7 +30,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <% if (outOfStockError) { %>
+                    <% if (typeof outOfStockError !== 'undefined' && outOfStockError) { %>
                         <div class="alert alert-danger" role="alert">
                             product in the cart exceed the available stock.
                         </div>
