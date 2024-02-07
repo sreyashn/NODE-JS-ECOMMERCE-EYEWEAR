@@ -76,14 +76,18 @@
                                                 <span class="product-price"> ₹<%= product.price %></span>
                                                 <% } %> -->
                                         <!-- </div> -->
-                                        <div class="product-price">
-                                            <% if (product.discount && product.discount < product.price) { %>
-                                                <span class="discounted-price">₹<%= product.discount %></span>
-                                                <span class="old-price">₹<%= product.price %></span>
-                                            <% } else { %>
-                                                <span>₹<%= product.price %></span>
-                                            <% } %>
-                                        </div>
+                                        <% if (product.stock > 0) { %>
+                                            <div class="product-price">
+                                                <% if (product.discount && product.discount < product.price) { %>
+                                                    <span class="discounted-price">₹<%= product.discount %></span>
+                                                    <span class="old-price">₹<%= product.price %></span>
+                                                <% } else { %>
+                                                    <span>₹<%= product.price %></span>
+                                                <% } %>
+                                            </div>
+                                        <% } else { %>
+                                            <p class="text-danger">Out of Stock</p>
+                                        <% } %>
                                         <div class="product-action-1 show">
                                             <button aria-label="Add To Wishlist" class="action-btn hover-up" onclick="addToWishlist('<%= product._id %>')">
                                                 <i class="fi-rs-heart"></i>

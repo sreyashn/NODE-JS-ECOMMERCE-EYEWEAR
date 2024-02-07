@@ -169,16 +169,19 @@
                                     <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                     <form action="/cart" method="post">
                                         <input type="hidden" value="<%= product._id %>"name="productData_id" id="">
-                                    <div class="detail-extralink">
-                                           
-                                            <input type="number" name="qty" class="w-25 py-4" value="1" min="1" max="10">
-                                        
-                                        <div class="product-extra-link2">
-                                            <button type="submit" class="button button-add-to-cart">Add to cart</button>
-                                            <!-- <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a> -->
-                                            
+                                        <div class="detail-extralink">
+                                            <% if (product.stock > 0) { %>
+                                                <form action="/cart" method="post">
+                                                    <input type="hidden" value="<%= product._id %>" name="productData_id">
+                                                    <input type="number" name="qty" class="w-25 py-4" value="1" min="1" max="10">
+                                                    <div class="product-extra-link2">
+                                                        <button type="submit" class="button button-add-to-cart">Add to cart</button>
+                                                    </div>
+                                                </form>
+                                            <% } else { %>
+                                                <p class="text-danger">Out of Stock</p>
+                                            <% } %>
                                         </div>
-                                    </div>
                                     </form>
 
                                     <ul class="product-meta font-xs color-grey mt-50">
