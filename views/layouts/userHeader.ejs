@@ -127,7 +127,7 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="index.html"><img src="/user-assets/imgs/theme/logo3.jpg" alt="logo"></a>
+                        <a href="/"><img src="/user-assets/imgs/theme/logo3.jpg" alt="logo"></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2" >
@@ -138,6 +138,7 @@
                                 <input id="searchInput" type="text" placeholder="Search for items...">
                             </form>
                         </div>
+                        <% if (userData) {%>
                         <div class="header-action-right">
                             <div class="header-action-2">
                                 <div class="header-action-icon-2">
@@ -152,7 +153,15 @@
                                         <!-- <span class="pro-count blue">2</span> -->
                                     </a>
                                 </div>    
+                                <% } else {%>  
 
+                                    <a class="" href="/login">
+                                        <!-- <img alt="logo" class="w-50" src="/user-assets/imgs/theme/icons/userlogo.png"> -->Login/signup
+                                    </a>
+                                    
+                                    
+                               
+                                  <%} %>
                     </div>
                 </div>
             </div>
@@ -161,7 +170,7 @@
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="index.html"><img src="/user-assets/imgs/theme/logo.svg" alt="logo"></a>
+                        <a href="/"><img src="/user-assets/imgs/theme/logo.svg" alt="logo"></a>
                     </div>
                     <div class="header-nav d-none d-lg-flex">
                         <div class="main-categori-wrap d-none d-lg-block">
@@ -210,9 +219,7 @@
                            
                     <div class="hotline d-none d-lg-block">
                     </ul>
-                        <% if (userData) {
-                                             
-                            %>
+                        <% if (userData) {%>
                           
                       <ul class=" navbar-nav ms-auto me-3 me-lg-4">
                         <li class="nav-item dropdown">
@@ -227,18 +234,8 @@
                             </ul>
                         </li>
                     </ul> 
-                       <% } else {%>  
+                       <% }%>  
 
-                        <a class="" href="/login">
-                            <img alt="logo" class="w-50" src="/user-assets/imgs/theme/icons/userlogo.png">
-                          
-                        </a>
-                        
-                        
-                   
-                      <%
-                            
-                        } %>
 
                     </div>
     

@@ -24,7 +24,7 @@ user_route.post("/register", userController.insertUser);
  //user login
  user_route.get("/login", auth.isLogout,userController.loginLoad);
  user_route.post("/login", userController.verifyLogin);
- user_route.get("/forgotPassword",auth.isLogout,userController.loadForgotpassword);
+ user_route.get("/forgotPassword",userController.loadForgotpassword);
  user_route.post("/forgotPassword",userController.forgotPasswordotp);
  user_route.get("/resetPassword",userController.loadResetPassword);
  user_route.post("/resetPassword",userController.resetPassword);
@@ -35,8 +35,8 @@ user_route.post("/register", userController.insertUser);
  user_route.get("/about", userController.loadAbout);
  user_route.get("/contact", userController.loadContact);
  user_route.get("/shop",userController.loadShop);
- user_route.get("/shopCategoryFilter",auth.isLogin,userController.loadShopCategory);
- user_route.get("/singleProduct/:id",auth.isLogin,userController.loadSingleShop);
+ user_route.get("/shopCategoryFilter",userController.loadShopCategory);
+ user_route.get("/singleProduct/:id",userController.loadSingleShop);
 
 
 
@@ -48,14 +48,14 @@ user_route.post("/register", userController.insertUser);
  user_route.delete("/removeCartitem",auth.isLogin,cartController.removeFromCart);
 
  //user
- user_route.get("/userprofile",userController.loadprofile );
- user_route.post("/userprofile",multer.uploadUser.single('image'),userController.userEdit );
- user_route.get("/userAddress",addressController.loadAddress );
- user_route.get("/addAddress",addressController.loadAddAddress );
- user_route.post("/addAddress",addressController.addAddress );
- user_route.get("/editAddress",addressController.loadEditAddress );
- user_route.post("/editAddress",addressController.editAddress);
- user_route.get("/deleteAddress",addressController.deleteAddress );
+ user_route.get("/userprofile",auth.isLogin,userController.loadprofile );
+ user_route.post("/userprofile",auth.isLogin,multer.uploadUser.single('image'),userController.userEdit );
+ user_route.get("/userAddress",auth.isLogin,addressController.loadAddress );
+ user_route.get("/addAddress",auth.isLogin,addressController.loadAddAddress );
+ user_route.post("/addAddress",auth.isLogin,addressController.addAddress );
+ user_route.get("/editAddress",auth.isLogin,addressController.loadEditAddress );
+ user_route.post("/editAddress",auth.isLogin,addressController.editAddress);
+ user_route.get("/deleteAddress",auth.isLogin,addressController.deleteAddress );
 
 
  //order
@@ -68,13 +68,13 @@ user_route.post("/register", userController.insertUser);
 
 
 //  user_route.get("/orderCancel",orderController.orderCancel);
- user_route.post("/orderCancel",orderController.orderCancel);
- user_route.post('/return',orderController.returnData );
+ user_route.post("/orderCancel",auth.isLogin,orderController.orderCancel);
+ user_route.post('/return',auth.isLogin,orderController.returnData );
 
 
  //coupon
 user_route.get('/coupons',auth.isLogin,couponController.userCouponList)
-user_route.post('/applyCoupon',orderController.applyCoupon)
+user_route.post('/applyCoupon',auth.isLogin,orderController.applyCoupon)
 
 //wishlist
 user_route.get("/wishlist", auth.isLogin,wishlistController.loadWishlist);

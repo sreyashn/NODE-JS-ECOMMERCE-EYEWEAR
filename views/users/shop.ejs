@@ -57,15 +57,24 @@
                                         <!-- <div class="product-badges product-badges-position product-badges-mrg">
                                             <span class="hot">Hot</span>
                                         </div> -->
-                                        <% function calculatePercentage(price, discountPrice) {
+                                        <!-- <% function calculatePercentage(price, discountPrice) {
                                             if (discountPrice && discountPrice < price) {
                                                 const discountPercentage = ((price - discountPrice) / price) * 100;
                                                 return discountPercentage.toFixed(2); // Adjust the decimal places as needed
                                             } else {
                                                 return ''; 
                                             }
-                                        } %>
-                                    
+                                        } %> -->
+                                        <% function calculatePercentage(price, discountPrice) {
+                                            if (discountPrice && discountPrice < price) {
+                                                <!-- const discountPercentage = ((price - discountPrice) / price) * 100; -->
+                                                <!-- return discountPercentage.toFixed(2); // Adjust the decimal places as needed -->
+                                                const discountPercentage = ((discountPrice/ price)*100) 
+                                                return discountPercentage.toFixed(2); 
+                                            } else {
+                                                return ''; 
+                                            }
+                                        } %>                                    
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
@@ -74,11 +83,14 @@
                                         <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
                                         <div class="rating-result" >
                                             <span>
-                                                <% const discountPercentage = calculatePercentage(product.price, product.discount); %>
-                                                <% if (discountPercentage) { %>
-                                                    <span><%= discountPercentage %></span>
-                                                    <span>%</span>
-                                                <% } %>
+                                              
+                                                <% if (product.stock > 0) { %>
+                                                    <% const discountPercentage = calculatePercentage(product.price, product.discount); %>
+                                                    <% if (discountPercentage) { %>
+                                                        <span><%= discountPercentage %></span>
+                                                        <span>%</span>
+                                                    <% } %>
+                                                    <% } %>
                                             </span>
                                         </div>
                                         <!-- <div class="product-price"> -->
@@ -92,7 +104,7 @@
                                         <% if (product.stock > 0) { %>
                                             <div class="product-price">
                                                 <% if (product.discount && product.discount < product.price) { %>
-                                                    <span class="discounted-price">₹<%= product.discount %></span>
+                                                    <span class="discounted-price">₹<%= product.price - product.discount %></span>
                                                     <span class="old-price">₹<%= product.price %></span>
                                                 <% } else { %>
                                                     <span>₹<%= product.price %></span>

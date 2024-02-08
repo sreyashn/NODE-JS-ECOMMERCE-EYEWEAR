@@ -75,16 +75,16 @@ const razorpayOrder = async (req, res) => {
     const cartItems = cart.items || [];
     let totalAmount = 0;
      totalAmount = cartItems.reduce(
-      (acc, item) => acc + (item.product.discount_price?item.product.discount_price * item.quantity:item.product.price * item.quantity || 0),
+      (acc, item) => acc + (item.product.discount?item.product.discount * item.quantity:item.product.price * item.quantity || 0),
       0
     );
 
     
     totalAmount = cartItems.reduce((acc, item) => {
-      if (item.product.discount_price && item.product.discountStatus &&
+      if (item.product.discount && item.product.discountStatus &&
         new Date(item.product.discountStart) <= new Date() &&
         new Date(item.product.discountEnd) >= new Date()) {
-        return acc + (item.product.discount_price * item.quantity || 0);
+        return acc + (item.product.discount * item.quantity || 0);
       } else {
         return acc + (item.product.price * item.quantity || 0);
       }
@@ -175,10 +175,10 @@ const checkOutpost = async (req, res) => {
   }
 
   let totalAmount = cartItems.reduce((acc, item) => {
-    if (item.product.discount_price && item.product.discountStatus &&
+    if (item.product.discount && item.product.discountStatus &&
       new Date(item.product.discountStart) <= new Date() &&
       new Date(item.product.discountEnd) >= new Date()) {
-      return acc + (item.product.discount_price * item.quantity || 0);
+      return acc + (item.product.discount * item.quantity || 0);
     } else {
       return acc + (item.product.price * item.quantity || 0);
     }
@@ -220,7 +220,7 @@ const checkOutpost = async (req, res) => {
                product: cartItem.product._id,
                quantity: cartItem.quantity,
                size: cartItem.size,
-               price:cartItem.product.discount_price &&cartItem.product.discountStatus &&new Date(cartItem.product.discountStart) <= new Date() && new Date(cartItem.product.discountEnd) >= new Date()?cartItem.product.discount_price :cartItem.product.price,
+               price:cartItem.product.discount &&cartItem.product.discountStatus &&new Date(cartItem.product.discountStart) <= new Date() && new Date(cartItem.product.discountEnd) >= new Date()?cartItem.product.discount :cartItem.product.price,
            
                status: "Confirmed",
                paymentMethod: paymentMethod,
@@ -250,7 +250,7 @@ const order = new Order({
     product: cartItem.product._id,
     quantity: cartItem.quantity,
     size: cartItem.size,
-    price:cartItem.product.discount_price&&cartItem.product.discountStatus &&new Date(cartItem.product.discountStart) <= new Date() && new Date(cartItem.product.discountEnd) >= new Date()?cartItem.product.discount_price :cartItem.product.price,
+    price:cartItem.product.discount&&cartItem.product.discountStatus &&new Date(cartItem.product.discountStart) <= new Date() && new Date(cartItem.product.discountEnd) >= new Date()?cartItem.product.discount :cartItem.product.price,
     status: "Confirmed",
     paymentMethod: paymentMethod,
     paymentStatus: "success",
@@ -272,7 +272,7 @@ await order.save();
         product: cartItem.product._id,
         quantity: cartItem.quantity,
         // size: cartItem.size,  
-        price:cartItem.product.discount_price &&cartItem.product.discountStatus &&new Date(cartItem.product.discountStart) <= new Date() && new Date(cartItem.product.discountEnd) >= new Date()?cartItem.product.discount_price:cartItem.product.price,
+        price:cartItem.product.discount &&cartItem.product.discountStatus &&new Date(cartItem.product.discountStart) <= new Date() && new Date(cartItem.product.discountEnd) >= new Date()?cartItem.product.discount:cartItem.product.price,
         paymentMethod: paymentMethod,
         status: "Confirmed",
         paymentStatus: "Pending",
@@ -460,18 +460,22 @@ const loadOrderHistory = async (req, res) => {
         const walletData = await Wallet.findOne({ user: userId, });
 
         if (walletData) {
-          walletData.walletBalance += (product.price * item.quantity) - (product.price * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100;
+          // walletData.walletBalance += (product.price * item.quantity) - (product.price * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100;
+          // walletData.transaction.push({
+          //     type: "credit",
+          //     amount: (product.price * item.quantity) - (product.price * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100,
+          // });
+          walletData.walletBalance += (product.discount * item.quantity) - (product.discount * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100;
           walletData.transaction.push({
               type: "credit",
-              amount: (product.price * item.quantity) - (product.price * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100,
-          });
-      
+              amount: (product.discount * item.quantity) - (product.discount * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100,
+          });      
           await walletData.save();
       } else {
           const wallet = new Wallet({
               user: userId,
-              transaction: [{ type: "credit", amount: (product.price * item.quantity) - (product.price * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100 }],
-              walletBalance: (product.price * item.quantity) - (product.price * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100,
+              transaction: [{ type: "credit", amount: (product.discount * item.quantity) - (product.discount * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100 }],
+              walletBalance: (product.discount * item.quantity) - (product.discount * item.quantity) * (couponData?.discount ? couponData.discount : 0) / 100,
           });
       
           await wallet.save();

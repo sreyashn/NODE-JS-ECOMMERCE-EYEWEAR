@@ -29,6 +29,7 @@ const loadOfferAdd = async (req, res) => {
         discountedProduct,
         discountedCategory,
       } = req.body;
+
   
       const existingNameOffer = await Offer.findOne({ name: offer_name });
       const existingCategoryOffer =
@@ -413,17 +414,17 @@ const offerBlock = async (req, res) => {
       if (offer.discountedProduct) {
         const discountedProduct = await Product.findById(offer.discountedProduct);
         if (offer.isActive == false) {
-          discountedProduct.discountPrice = discountedProduct.price;
+          discountedProduct.discount = discountedProduct.price;
         } else {
           let discount = 0;
        
-            discount = (discountedProduct.price * offer.discountValue) / 100;
+          discountedProduct.discount = (discountedProduct.price * offer.discountValue) / 100;
        
-          discountedProduct.discountPrice = calculateDiscountPrice(
-            discountedProduct.price,
+          // discountedProduct.discount = calculateDiscountPrice(
+          //   discountedProduct.price,
           
-            offer.discountValue
-          );
+          //   offer.discountValue
+          // );
         }
   
         if (discountedProduct) {
@@ -447,17 +448,17 @@ const offerBlock = async (req, res) => {
         }
         for (const product of discountedProductData) {
           if (offer.isActive == false) {
-            product.discountPrice = product.price;
+            product.discount = product.price;
           } else {
             let discount = 0;
          
-              discount = (product.price * offer.discountValue) / 100;
+            product.discount = (product.price * offer.discountValue) / 100;
           
-            product.discountPrice = calculateDiscountPrice(
-              product.price,
+            // product.discountPrice = calculateDiscountPrice(
+            //   product.price,
            
-              offer.discountValue
-            );
+            //   offer.discountValue
+            // );
           }
           await product.save();
         }

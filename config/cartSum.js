@@ -9,7 +9,7 @@ const calculateSubtotal = (cart) => {
     new Date(cartItem.product.discountStart) <= new Date() &&
     new Date(cartItem.product.discountEnd) >= new Date();
 
-const priceToConsider = isDiscounted ? cartItem.product.discount_price : cartItem.product.price;
+const priceToConsider = isDiscounted ? cartItem.product.price - cartItem.product.discount : cartItem.product.price;
 
   subtotal += priceToConsider * cartItem.quantity;
   console.log(subtotal);
@@ -26,7 +26,7 @@ const calculateProductTotal = (cart) => {
     new Date(cartItem.product.discountStart) <= new Date() &&
     new Date(cartItem.product.discountEnd) >= new Date();
 
-const priceToConsider = isDiscounted ? cartItem.product.discount_price : cartItem.product.price;
+const priceToConsider = isDiscounted ? cartItem.product.price - cartItem.product.discount : cartItem.product.price;
 
 const total = priceToConsider * cartItem.quantity; 
 

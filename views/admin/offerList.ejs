@@ -10,7 +10,7 @@
             </div>
             <div class="card mb-4">
                 <header class="card-header">
-                    <div class="row align-items-center" style="">
+                    <div class="row align-items-center">
 
                 <form action="" method="get">
 
@@ -71,10 +71,17 @@
                       <td><%= new Date(offer.startDate).toLocaleDateString() %>  </td>
                 <td><%= new Date(offer.endDate ).toLocaleDateString() %> </td>
 
-                      <td style="width: 250px;"><%if(offer.discountOn=='product'){%> 
-                         <%= offer.discountedProduct.name.slice(0, 70) + '...'  %><%} else { %>
-                            <%= offer.discountedCategory.name%> <% } %> 
-                        </td>
+                     
+
+                <td style="width: 250px;">
+                  <% if (offer.discountOn === 'product' && offer.discountedProduct && offer.discountedProduct._id) { %>
+                      <%= offer.discountedProduct.name ? offer.discountedProduct.name.slice(0, 70) + '...' : '' %>
+                  <% } else if (offer.discountOn === 'category' && offer.discountedCategory && offer.discountedCategory._id) { %>
+                      <%= offer.discountedCategory.name %>
+                  <% } %>
+              </td>
+              
+                      
 
                       
                         <td>   <% if (offer.isActive == true) { %>

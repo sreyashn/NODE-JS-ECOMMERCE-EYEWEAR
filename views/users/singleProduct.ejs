@@ -97,7 +97,7 @@
 
                                     <div class=" image-container">
                                         <div class="zoom-container">
-                                            <img src='/admin-assets/imgs/product/<%= product.image[0]%>' id="mainImage"
+                                            <img src='/assets/imgs/product/<%= product.image[0]%>' id="mainImage"
                                                 alt="Image" class="image-zoom">
                                         </div>
                                     </div>
@@ -129,28 +129,32 @@
                                             </div> -->
                                             <% function calculatePercentage(price, discountPrice) {
                                                 if (discountPrice && discountPrice < price) {
-                                                    const discountPercentage = ((price - discountPrice) / price) * 100;
-                                                    return discountPercentage.toFixed(2); // Adjust the decimal places as needed
+                                                    <!-- const discountPercentage = ((price - discountPrice) / price) * 100; -->
+                                                    <!-- return discountPercentage.toFixed(2); // Adjust the decimal places as needed -->
+                                                    const discountPercentage = ((discountPrice/ price)*100) 
+                                                    return discountPercentage.toFixed(2); 
                                                 } else {
                                                     return ''; 
                                                 }
-                                            } %>
+                                            } %>    
                                         </div>
                                     </div>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
                                             <% if (product.discount && product.discount < product.price) { %>
-                                            <ins><span class="text-brand">₹<%= product.discount %></span></ins>
+                                            <ins><span class="text-brand">₹<%= product.price - product.discount %></span></ins>
                                             <ins><span class="old-price font-md ml-15">₹<%= product.price %></span></ins>
                                             <% } else { %>
                                                 <ins><span class="text-brand">₹<%= product.price %></span></ins>
                                             <% } %>
                                             <span>
-                                                <% const discountPercentage = calculatePercentage(product.price, product.discount); %>
-                                                <% if (discountPercentage) { %>
-                                                    <span><%= discountPercentage %></span>
-                                                    <span>%</span>
-                                                <% } %>
+                                                <% if (product.stock > 0) { %>
+                                                    <% const discountPercentage = calculatePercentage(product.price, product.discount); %>
+                                                    <% if (discountPercentage) { %>
+                                                        <span><%= discountPercentage %></span>
+                                                        <span>%</span>
+                                                    <% } %>
+                                                    <% } %>
                                             </span>
                                         </div>
                                     </div>

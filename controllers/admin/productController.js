@@ -54,7 +54,7 @@ const addProduct = async (req, res) => {
     }
 
     const { name, category, price, stock, description } = req.body;
-    const sizedata = req.body.sizes;
+
     
     const addProducts = new Product({
       name,
@@ -62,7 +62,6 @@ const addProduct = async (req, res) => {
       price,
       stock,
       description,
-      sizes: sizedata,
       image: imageData,
     });
 console.log("Product:",addProducts);

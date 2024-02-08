@@ -30,9 +30,7 @@
                                   <li class="nav-item">
                                       <a class="nav-link"  href="/orderSuccess" ><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
                                   </li>
-                                  <li class="nav-item">
-                                      <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
-                                  </li>
+                            
                                   <li class="nav-item">
                                     <a class="nav-link" href="/Wallets"><i class="fi-rs-shopping-bag mr-10"></i>Wallets</a>
                                   </li>
@@ -158,7 +156,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form  action="/resetPassword" method="post" onsubmit="return validationPasswordChecking()">
+        <form  action="/forgotPassword" method="post" onsubmit="return validationPasswordChecking()">
           <div class="form-group"><input type="password" id="password" name="password" placeholder="Enter Password"/>
           <div id="errorpassword" class="ms-2 text-danger"></div></div>
           <div class="form-group"><input type="password" id="cpassword" placeholder="Confirm Password"/>
@@ -310,7 +308,7 @@ function validationPasswordChecking(event) {
 
 function redirectToResetPassword() {
         // Redirect to the reset password page
-        window.location.href = "/resetPassword";
+        window.location.href = "/forgotPassword";
     }
   
   

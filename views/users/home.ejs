@@ -140,7 +140,7 @@
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
+                    <a href="/"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                     <button class="close-style search-close">
@@ -315,7 +315,7 @@
                             <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
                         </li>
                     </ul>
-                    <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
+                    <a href="/shop" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
                 </div>
                 <!--End nav-tabs-->
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
@@ -338,8 +338,8 @@
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
                                             <a href="/singleProduct/<%= product._id%>">
-                                                <img class="default-img" src="admin-assets/imgs/product/<%= product.image[0]%>" alt="">
-                                                <img class="hover-img" src="admin-assets/imgs/product/<%= product.image[1]%>" alt="">
+                                                <img class="default-img" src="/assets/imgs/product/<%= product.image[0]%>" alt="">
+                                                <img class="hover-img" src="/assets/imgs/product/<%= product.image[1]%>" alt="">
                                             </a>
                                         </div>
                                         <!-- <div class="product-action-1">
@@ -350,6 +350,16 @@
                                         <div class="product-badges product-badges-position product-badges-mrg">
                                             <span class="hot">Hot</span>
                                         </div>
+                                        <% function calculatePercentage(price, discountPrice) {
+                                            if (discountPrice && discountPrice < price) {
+                                                <!-- const discountPercentage = ((price - discountPrice) / price) * 100; -->
+                                                <!-- return discountPercentage.toFixed(2); // Adjust the decimal places as needed -->
+                                                const discountPercentage = ((discountPrice/ price)*100) 
+                                                return discountPercentage.toFixed(2); 
+                                            } else {
+                                                return ''; 
+                                            }
+                                        } %> 
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
@@ -362,23 +372,27 @@
                                         <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
                                         <div class="rating-result">
                                             <span>
-                                                <span>
-                                              <%if(product.discountStatus==true &&new Date() <= new Date(product.discountEnd)  ){%>
-                                                                            <% const percentageOff = ((product.price - product.discountPrice) / product.price) * 100; %>
-                                                                            <span style="font-size: 16px; background-color: rgb(255, 255, 255); border-radius: 2px; padding: 5px 10px 5px 10px;" class="old-price ml-3 text-success">- <%= percentageOff.toFixed(2) %>% OFF</span>
-                                                                        <%}%>
-                                           
-                                            </span>
+                                                <% if (product.stock > 0) { %>
+                                                    <% const discountPercentage = calculatePercentage(product.price, product.discount); %>
+                                                    <% if (discountPercentage) { %>
+                                                        <span><%= discountPercentage %></span>
+                                                        <span>%</span>
+                                                    <% } %>
+                                                    <% } %>
                                             </span>
                                         </div>
-                                        <div class="product-price">
-                                            <% if (product.discountStatus && new Date() <= new Date(product.discountEnd) ) { %>
-                                                <span>₹<%= product.discountPrice %> </span>
-                                                <span class="old-price">- ₹<s><%= product.price %></s></span>
-                                              <% } else { %>
-                                                <span> ₹<%= product.price %></span>
-                                              <% } %>
-                                        </div>
+                                        <% if (product.stock > 0) { %>
+                                            <div class="product-price">
+                                                <% if (product.discount && product.discount < product.price) { %>
+                                                    <span class="discounted-price">₹<%= product.price - product.discount %></span>
+                                                    <span class="old-price">₹<%= product.price %></span>
+                                                <% } else { %>
+                                                    <span>₹<%= product.price %></span>
+                                                <% } %>
+                                            </div>
+                                        <% } else { %>
+                                            <p class="text-danger">Out of Stock</p>
+                                        <% } %>
                                         <div class="product-action-1 show">
                                             <!-- <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a> -->
                                         </div>

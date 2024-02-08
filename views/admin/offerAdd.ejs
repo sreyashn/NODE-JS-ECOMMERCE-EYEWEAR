@@ -12,9 +12,8 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mb-4">
-                    <a href="/admin/offerList"><button
-                            class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button></a>
-                    <button type="button" onclick="addCoupon(event)" class="btn btn-md rounded font-sm hover-up">Add
+                    <a href="/admin/offerList">
+                    <button type="button" onclick="addOffer(event)" class="btn btn-md rounded font-sm hover-up">Add
                         Offer</button>
 
                 </div>
@@ -184,6 +183,8 @@
             const maxAmt_error = document.getElementById("maxAmt-error");
             const startDate_error = document.getElementById("startDate-error");
             const expiryDate_error = document.getElementById("expiryDate-error");
+            // const discounted_Product_error = document.getElementById("discounted_Product_error");
+            // const discounted_Category_error = document.getElementById("discounted_Category_error");
 
 
 
@@ -194,7 +195,8 @@
             startDate_error.innerHTML = startDate.trim() === "" ? "Please enter start date" : "";
 
             expiryDate_error.innerHTML = expiryDate.trim() === "" ? "Please enter expiry date" : "";
-
+            // discounted_Product_error.innerHTML = expiryDate.trim()  === "" ? "Please enter product name " :"";
+            // discounted_Category_error.innerHTML = expiryDate.trim()  === "" ? "Please enter category name " :"";
 
             return (
                 offer_name_error.innerHTML ||
@@ -202,10 +204,19 @@
                 discountOn_error.innerHTML ||
                 maxAmt_error.innerHTML ||
                 startDate_error.innerHTML ||
-                expiryDate_error.innerHTML
+                expiryDate_error.innerHTML  
+                // discounted_Product_error.innerHTML ||
+                // discounted_Category_error.innerHTML
             );
         }
-        const addCoupon = () => {
+
+    </script>
+
+
+      <script>
+
+        
+        const addOffer = () => {
             const offer_name = document.getElementById("offer_name").value;
             const discountOn = document.querySelector('select[name="discountOn"]').value;
             const discountedProduct = document.querySelector('select[name="discountedProduct"]').value;
@@ -246,28 +257,32 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-console.log(data,"validationChecking");
+             console.log(data,"validationChecking");
                     if (data.success) {
                         window.location.href = '/admin/offerlist';
                     } else {
 
-                        alert('Error occurred while adding coupon23');
+                        Swal.fire({
+                        title: 'Error',
+                        text: 'Offer already exist',
+                        icon: 'error',
+                    });
                     }
                 })
                 .catch(error => {
 
                     console.error('Error:', error);
-                    alert('Error occurred adding couponeee');
+                    alert('Error occurred adding offer');
                 });
             }
         }
 
 
 
+</script>
 
 
-
-    </script>
+ 
 
 
 

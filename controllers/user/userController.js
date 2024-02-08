@@ -332,16 +332,36 @@ const loadWallets = async (req, res) => {
   }
 };
 
+// const loadHome = async (req, res) => {
+//   try {
+//     const userId = req.session.user_id;
+
+//     const userData = await User.findById(userId);
+//     const productData = await Product.find();
+//     const categories = await Category.find();
+
+//     if (userData) {
+
+//       res.render("users/home", { userData, products: productData, categories, banner: [] });
+//     } else {
+//       res.render("users/home", { userData: null, products: productData, categories, banner: [] });
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
+
+
 const loadHome = async (req, res) => {
   try {
     const userId = req.session.user_id;
 
     const userData = await User.findById(userId);
-    const productData = await Product.find();
+    const productData = await Product.find({ is_listed: true }); // Filter products by is_listed property
     const categories = await Category.find();
 
     if (userData) {
-
       res.render("users/home", { userData, products: productData, categories, banner: [] });
     } else {
       res.render("users/home", { userData: null, products: productData, categories, banner: [] });
@@ -350,6 +370,7 @@ const loadHome = async (req, res) => {
     console.log(error.message);
   }
 };
+
 
 const loadAbout = async (req, res) => {
   try {
@@ -406,9 +427,9 @@ const loadContact = async (req, res) => {
 
 const loadShop = async (req, res) => {
   try {
-      // const userId = req.session.user_id;
-      // const userData = await User.findById(userId);
-      const userData = ""
+      const userId = req.session.user_id;
+      const userData = await User.findById(userId);
+      // const userData = ""
       const categories = await Category.find();
       const page = parseInt(req.query.page) || 1;
       const limit = 6;
@@ -455,11 +476,11 @@ const loadShopCategory = async (req, res) => {
 const loadSingleShop = async (req, res) => {
   try {
     const userId = req.session.user_id;
-    const userData = await User.findById(userId);
+    const userData = await User.findById(userId) || [];
 
-    if (!userData) {
-      return res.status(404).send("User not found");
-    }
+    // if (!userData) {
+    //   return res.status(404).send("User not found");
+    // }
 
     const productId = req.params.id;
     const product = await Product.findById(productId);
