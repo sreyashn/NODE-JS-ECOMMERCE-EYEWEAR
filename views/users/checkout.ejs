@@ -66,69 +66,44 @@
                         <div class="row">
 
 
-                            <% addressData?.forEach((address,index)=> {
-
-
-
-
-                                %> <div class="col-12">
+                            <% addressData?.forEach((address, index) => {
+                                if (address.is_listed) {
+                              %>
+                                  <div class="col-12">
                                     <div class="card mb-3 mb-lg-0">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-
-                                                <% const address_id=address.user %>
-
-
-                                                    <% if (address_id.toString()===userData._id.toString()) { %>
-                                                        <div class="d-flex justify-content-between">
-                                                            <div>
-                                                                <span>
-                                                                    <%= userData.name %>
-
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <span>
-
-                                                                    <%= userData.mobile %>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-
-                                                        <% } %>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body d-flex">
-                                            <address>
-                                                <%=address.houseName %>
-                                                    <%=address.city %>
-                                                        <%=address.street %>
-
-                                                            <%=address.state %>
-                                                                <%=address.pincode %>
-                                            </address>
-                                            <div class="d-flex justify-content-end w-100">
-
-
-                                                <div class="">
-                                  
-<input type="radio" value="<%= address._id %>" name="checkAddress" id="addressradio">
-
-                                                </div>
+                                      <div class="card-header">
+                                        <h5 class="mb-0">
+                                          <% const address_id = address.user %>
+                                          <% if (address_id.toString() === userData._id.toString()) { %>
+                                            <div class="d-flex justify-content-between">
+                                              <div>
+                                                <span><%= userData.name %></span>
+                                              </div>
+                                              <div>
+                                                <span><%= userData.mobile %></span>
+                                              </div>
                                             </div>
-
+                                          <% } %>
+                                        </h5>
+                                      </div>
+                                      <div class="card-body d-flex">
+                                        <address>
+                                          <%= address.houseName %>
+                                          <%= address.city %>
+                                          <%= address.street %>
+                                          <%= address.state %>
+                                          <%= address.pincode %>
+                                        </address>
+                                        <div class="d-flex justify-content-end w-100">
+                                          <div class="">
+                                            <input type="radio" value="<%= address._id %>" name="checkAddress" id="addressradio">
+                                          </div>
                                         </div>
+                                      </div>
                                     </div>
-                                </div>
-
-
-
-
-
-
-
-
-                                <% }); %>
+                                  </div>
+                              <% } }); %>
+                              
                         </div>
 
                         <form action="/addAddress" method="post"  onsubmit="return validationChecking()">
